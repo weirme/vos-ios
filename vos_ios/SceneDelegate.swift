@@ -1,6 +1,6 @@
 //
 //  SceneDelegate.swift
-//  dextr_demo
+//  vos_ios
 //
 //  Created by re on 2020/2/16.
 //  Copyright © 2020 weirme. All rights reserved.

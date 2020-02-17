@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,7 +14,9 @@
 		363DEE2823FA36370053E756 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 363DEE2723FA36370053E756 /* Assets.xcassets */; };
 		363DEE2B23FA36370053E756 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 363DEE2923FA36370053E756 /* LaunchScreen.storyboard */; };
 		363DEE3323FA366C0053E756 /* DrawPointController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363DEE3223FA366C0053E756 /* DrawPointController.swift */; };
-		363DEE3623FA37030053E756 /* Surge in Frameworks */ = {isa = PBXBuildFile; productRef = 363DEE3523FA37030053E756 /* Surge */; };
+		36990FDB23FABEC500CDE2AB /* CVHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 36990FDA23FABEC500CDE2AB /* CVHelper.mm */; };
+		36990FE123FAC26D00CDE2AB /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36990FE023FAC26D00CDE2AB /* opencv2.framework */; };
+		36990FE323FAC2D200CDE2AB /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 36990FE223FAC2D200CDE2AB /* .gitignore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +29,10 @@
 		363DEE2A23FA36370053E756 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		363DEE2C23FA36370053E756 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		363DEE3223FA366C0053E756 /* DrawPointController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawPointController.swift; sourceTree = "<group>"; };
+		36990FD923FABEC500CDE2AB /* vos_ios-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "vos_ios-Bridging-Header.h"; sourceTree = "<group>"; };
+		36990FDA23FABEC500CDE2AB /* CVHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CVHelper.mm; sourceTree = "<group>"; };
+		36990FE023FAC26D00CDE2AB /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
+		36990FE223FAC2D200CDE2AB /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -34,7 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				363DEE3623FA37030053E756 /* Surge in Frameworks */,
+				36990FE123FAC26D00CDE2AB /* opencv2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,6 +52,8 @@
 			children = (
 				363DEE1D23FA36300053E756 /* vos_ios */,
 				363DEE1C23FA36300053E756 /* Products */,
+				36990FE223FAC2D200CDE2AB /* .gitignore */,
+				36990FE023FAC26D00CDE2AB /* opencv2.framework */,
 			);
 			sourceTree = "<group>";
 		};
@@ -68,6 +76,8 @@
 				363DEE2723FA36370053E756 /* Assets.xcassets */,
 				363DEE2923FA36370053E756 /* LaunchScreen.storyboard */,
 				363DEE2C23FA36370053E756 /* Info.plist */,
+				36990FDA23FABEC500CDE2AB /* CVHelper.mm */,
+				36990FD923FABEC500CDE2AB /* vos_ios-Bridging-Header.h */,
 			);
 			path = vos_ios;
 			sourceTree = "<group>";
@@ -89,7 +99,6 @@
 			);
 			name = vos_ios;
 			packageProductDependencies = (
-				363DEE3523FA37030053E756 /* Surge */,
 			);
 			productName = vos_ios;
 			productReference = 363DEE1B23FA36300053E756 /* vos_ios.app */;
@@ -107,6 +116,7 @@
 				TargetAttributes = {
 					363DEE1A23FA36300053E756 = {
 						CreatedOnToolsVersion = 11.3.1;
+						LastSwiftMigration = 1130;
 					};
 				};
 			};
@@ -120,7 +130,6 @@
 			);
 			mainGroup = 363DEE1223FA36300053E756;
 			packageReferences = (
-				363DEE3423FA37030053E756 /* XCRemoteSwiftPackageReference "Surge" */,
 			);
 			productRefGroup = 363DEE1C23FA36300053E756 /* Products */;
 			projectDirPath = "";
@@ -136,6 +145,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				36990FE323FAC2D200CDE2AB /* .gitignore in Resources */,
 				363DEE2B23FA36370053E756 /* LaunchScreen.storyboard in Resources */,
 				363DEE2823FA36370053E756 /* Assets.xcassets in Resources */,
 				363DEE2623FA36300053E756 /* Main.storyboard in Resources */,
@@ -153,6 +163,7 @@
 				363DEE2323FA36300053E756 /* ViewController.swift in Sources */,
 				363DEE1F23FA36300053E756 /* AppDelegate.swift in Sources */,
 				363DEE2123FA36300053E756 /* SceneDelegate.swift in Sources */,
+				36990FDB23FABEC500CDE2AB /* CVHelper.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,7 +307,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/vos_ios",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = vos_ios/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -304,6 +321,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "weirme.vos-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "vos_ios/vos_ios-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -313,7 +332,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/vos_ios",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = vos_ios/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -321,6 +346,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "weirme.vos-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "vos_ios/vos_ios-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -348,25 +374,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		363DEE3423FA37030053E756 /* XCRemoteSwiftPackageReference "Surge" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Jounce/Surge";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.3.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		363DEE3523FA37030053E756 /* Surge */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 363DEE3423FA37030053E756 /* XCRemoteSwiftPackageReference "Surge" */;
-			productName = Surge;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 363DEE1323FA36300053E756 /* Project object */;
 }
