@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,6 +13,8 @@
 		363DEE2623FA36300053E756 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 363DEE2423FA36300053E756 /* Main.storyboard */; };
 		363DEE2823FA36370053E756 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 363DEE2723FA36370053E756 /* Assets.xcassets */; };
 		363DEE2B23FA36370053E756 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 363DEE2923FA36370053E756 /* LaunchScreen.storyboard */; };
+		363DEE3323FA366C0053E756 /* DrawPointController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363DEE3223FA366C0053E756 /* DrawPointController.swift */; };
+		363DEE3623FA37030053E756 /* Surge in Frameworks */ = {isa = PBXBuildFile; productRef = 363DEE3523FA37030053E756 /* Surge */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,7 @@
 		363DEE2723FA36370053E756 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		363DEE2A23FA36370053E756 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		363DEE2C23FA36370053E756 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		363DEE3223FA366C0053E756 /* DrawPointController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawPointController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +34,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				363DEE3623FA37030053E756 /* Surge in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,6 +60,7 @@
 		363DEE1D23FA36300053E756 /* vos_ios */ = {
 			isa = PBXGroup;
 			children = (
+				363DEE3223FA366C0053E756 /* DrawPointController.swift */,
 				363DEE1E23FA36300053E756 /* AppDelegate.swift */,
 				363DEE2023FA36300053E756 /* SceneDelegate.swift */,
 				363DEE2223FA36300053E756 /* ViewController.swift */,
@@ -83,6 +88,9 @@
 			dependencies = (
 			);
 			name = vos_ios;
+			packageProductDependencies = (
+				363DEE3523FA37030053E756 /* Surge */,
+			);
 			productName = vos_ios;
 			productReference = 363DEE1B23FA36300053E756 /* vos_ios.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +119,9 @@
 				Base,
 			);
 			mainGroup = 363DEE1223FA36300053E756;
+			packageReferences = (
+				363DEE3423FA37030053E756 /* XCRemoteSwiftPackageReference "Surge" */,
+			);
 			productRefGroup = 363DEE1C23FA36300053E756 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -138,6 +149,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				363DEE3323FA366C0053E756 /* DrawPointController.swift in Sources */,
 				363DEE2323FA36300053E756 /* ViewController.swift in Sources */,
 				363DEE1F23FA36300053E756 /* AppDelegate.swift in Sources */,
 				363DEE2123FA36300053E756 /* SceneDelegate.swift in Sources */,
@@ -336,6 +348,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		363DEE3423FA37030053E756 /* XCRemoteSwiftPackageReference "Surge" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Jounce/Surge";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		363DEE3523FA37030053E756 /* Surge */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 363DEE3423FA37030053E756 /* XCRemoteSwiftPackageReference "Surge" */;
+			productName = Surge;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 363DEE1323FA36300053E756 /* Project object */;
 }
