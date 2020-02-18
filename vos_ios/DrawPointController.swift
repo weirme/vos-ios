@@ -1,11 +1,3 @@
-//
-//  DrawPoint.swift
-//  vos_ios
-//
-//  Created by re on 2020/2/16.
-//  Copyright © 2020 weirme. All rights reserved.
-//
-
 import UIKit
 
 class DrawPointController: UIViewController {

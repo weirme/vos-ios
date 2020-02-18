@@ -1,10 +1,11 @@
 //
 //  CVHelper.m
-//  vos_ios
+//  test
 //
 //  Created by re on 2020/2/17.
 //  Copyright © 2020 weirme. All rights reserved.
 //
+
 
 #import <opencv2/opencv.hpp>
 #import <opencv2/imgcodecs/ios.h>
@@ -16,11 +17,14 @@
 #include <cassert>
 #include <algorithm>
 
-#import "vos_ios-Bridging-Header.h"
-
+#import "CVHelper.h"
+#import "../TorchBridge/DEXTR.h"
 
 #define PAD 50
+#define THRES 0.8
 #define RESIZE 512
+
+const std::string DEXTR_PATH = [[NSBundle mainBundle] pathForResource:@"dextr" ofType:@"pt"].UTF8String;
 
 
 static void split(const std::string& s, std::vector<int>& sv, const char delim=' ') {
@@ -83,6 +87,28 @@ static cv::Mat makeHeatmap(std::vector<int> xcoords, std::vector<int> ycoords, i
 }
 
 
+static cv::Mat crop2FullMask(cv::Mat cropMask, std::vector<int> bbox, int width, int height, int pad) {
+    std::vector<int> bounds = {0, 0, width - 1, height - 1};
+    std::vector<int> bboxValid = {
+        std::max(bbox[0], bounds[0]),
+        std::max(bbox[1], bounds[1]),
+        std::min(bbox[2], bounds[2]),
+        std::min(bbox[3], bounds[3])};
+    
+    int cropWidth = bboxValid[2] - bboxValid[0] + 1;
+    int cropHeight = bboxValid[3] - bboxValid[1] + 1;
+    std::vector<int> offsets = {bboxValid[0], bboxValid[1]};
+    cv::resize(cropMask, cropMask, cv::Size(cropWidth, cropHeight), cv::INTER_CUBIC);
+    cv::Mat mask;
+    cv::compare(cropMask, THRES, mask, cv::CMP_GT);
+    cv::Mat fullMask = cv::Mat::zeros(height, width, CV_8UC1);
+    cv::Rect roiRect = cv::Rect(offsets[0], offsets[1], cropWidth, cropHeight);
+    std::cout << mask;
+    mask.copyTo(fullMask(roiRect));
+    return fullMask;
+}
+
+
 @implementation CVHelper
 
 + (UIImage*) cropImage: (UIImage*) image withExtremePoints: (NSString*) points {
@@ -119,15 +145,22 @@ static cv::Mat makeHeatmap(std::vector<int> xcoords, std::vector<int> ycoords, i
     dstChannels.push_back(srcChannels[1]);
     dstChannels.push_back(srcChannels[2]);
     dstChannels.push_back(heatmap);
-    
     cv::merge(dstChannels, inputs);
-    std::cout << inputs;
     
-    UIImage* img;
-    UIImageToMat(img, resizeMat);
+    DEXTR net(DEXTR_PATH);
+    cv::Mat outputs = net.forward(inputs);
+    cv::resize(outputs, outputs, cv::Size(RESIZE, RESIZE));
+    
+    outputs = -outputs;
+    cv::exp(outputs, outputs);
+    cv::Mat pred = 1 / (1 + outputs);
+    
+    cv::Mat mask = crop2FullMask(pred, bbox, image.size.width, image.size.height, PAD);
+    std::cout << mask;
+    
+    UIImage* img = MatToUIImage(resizeMat);
     
     return img;
 }
 
 @end
-
