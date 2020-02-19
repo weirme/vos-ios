@@ -5,20 +5,21 @@ import AVFoundation
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
-    @IBOutlet weak var button: UIButton!
+    @IBOutlet weak var uploadButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
     
-    @IBAction func click(_ sender: Any) {
+    @IBAction func upload(_ sender: Any) {
         let imagePicker: UIImagePickerController = UIImagePickerController()
         imagePicker.modalPresentationStyle = .overFullScreen
         imagePicker.delegate = self
         imagePicker.allowsEditing = false
         imagePicker.sourceType = UIImagePickerController.SourceType.photoLibrary
         imagePicker.mediaTypes = ["public.movie"]
+        imagePicker.videoExportPreset = AVAssetExportPresetPassthrough
         self.present(imagePicker, animated: true, completion: nil)
     }
     

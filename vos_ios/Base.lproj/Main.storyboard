@@ -16,19 +16,27 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fiZ-20-s2C">
-                                <rect key="frame" x="164" y="318" width="46" height="30"/>
+                                <rect key="frame" x="92" y="335" width="191" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
+                                <fontDescription key="fontDescription" name="MarkerFelt-Wide" family="Marker Felt" pointSize="24"/>
+                                <state key="normal" title="Select your video !">
+                                    <color key="titleColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
+                                </state>
                                 <connections>
-                                    <action selector="click:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ncQ-Hy-KFp"/>
+                                    <action selector="upload:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cQE-Tn-gUZ"/>
                                 </connections>
                             </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="arrow.up.right.video.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="GMD-X4-DSu">
+                                <rect key="frame" x="125" y="211.5" width="125" height="125"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="button" destination="fiZ-20-s2C" id="0Be-cH-uYZ"/>
+                        <outlet property="uploadButton" destination="fiZ-20-s2C" id="L4M-D6-qqo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -36,4 +44,7 @@
             <point key="canvasLocation" x="-1378.4000000000001" y="160.56971514242881"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="arrow.up.right.video.fill" catalog="system" width="64" height="40"/>
+    </resources>
 </document>

@@ -1,30 +1,29 @@
 import UIKit
+import NVActivityIndicatorView
 
-class DrawPointController: UIViewController {
+
+class DrawPointController: UIViewController, NVActivityIndicatorViewable {
+    
+    var undoButton: UIButton!
+    var okButton: UIButton!
     
     var imageView: UIImageView!
     var image: UIImage!
-    
-    var coordinateList: [CGPoint] = []
+
+    var coords: [[Int]] = []
+    var xmarks: [UIImageView] = []
+    var isOverlay = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        self.view.backgroundColor = .black
+        self.addButtons()
         self.initImageView()
     }
     
     func initImageView() {
-        let fullScreenSize = UIScreen.main.bounds.size
-        
-        self.image = image.resizeByLonger(screenSize: fullScreenSize)
-        let size = self.image.size
-        let origin: CGPoint
-        if size.height < size.width {
-            origin = CGPoint(x: 0, y: (fullScreenSize.height - size.height) / 2)
-        } else {
-            origin = CGPoint(x: 0, y: 0)
-        }
-        self.imageView = UIImageView(frame: CGRect(origin: origin, size: size))
+        let frame: CGRect = getImageViewFrame(image: self.image)
+        self.imageView = UIImageView(frame: frame)
         self.imageView.image = self.image
         self.view.addSubview(self.imageView)
         
@@ -33,42 +32,114 @@ class DrawPointController: UIViewController {
         self.imageView.addGestureRecognizer(tapGesture)
     }
     
+    func addButtons() {
+        let width = 50
+        let height = 30
+        let pad = 10
+        let screenSize = UIScreen.main.bounds.size
+        
+        self.undoButton = UIButton(frame: CGRect(x: pad, y: pad, width: width, height: height))
+        self.undoButton.setTitle("Undo", for: .normal)
+        self.undoButton.setTitleColor(.red, for: .normal)
+        self.undoButton.contentHorizontalAlignment = .leading
+        self.undoButton.addTarget(self, action: #selector(undoAction(sender:)), for: .touchUpInside)
+        
+        self.okButton = UIButton(frame: CGRect(x: Int(screenSize.width) - pad - width, y: pad, width: width, height: height))
+        self.okButton.setTitle("OK", for: .normal)
+        self.okButton.setTitleColor(.blue, for: .normal)
+        self.okButton.contentHorizontalAlignment = .trailing
+        self.okButton.addTarget(self, action: #selector(okAction(sender:)), for: .touchUpInside)
+        self.okButton.isHidden = true
+        
+        self.view.addSubview(self.undoButton)
+        self.view.addSubview(self.okButton)
+    }
+    
     @objc func tapAction(tap: UITapGestureRecognizer) {
         let point = tap.location(in: self.imageView)
-        print(point.x, point.y)
-        self.coordinateList.append(point)
         let config =  UIImage.SymbolConfiguration(pointSize: 8, weight: .black)
-        let img = UIImageView(image: UIImage(systemName: "xmark", withConfiguration: config))
-        img.frame.origin = CGPoint(x: point.x, y: point.y)
-        img.tintColor = #colorLiteral(red: 0.5725490451, green: 0, blue: 0.2313725501, alpha: 1)
-        self.imageView.addSubview(img)
+        let xmark = UIImageView(image: UIImage(systemName: "xmark", withConfiguration: config))
+        xmark.frame.origin = CGPoint(
+            x: point.x - xmark.frame.size.width / 2,
+            y: point.y - xmark.frame.size.height / 2)
+        xmark.tintColor = #colorLiteral(red: 0.5725490451, green: 0, blue: 0.2313725501, alpha: 1)
         
-        if self.coordinateList.count == 4 {
+        self.coords.append(
+        getCoordsInImage(coordsInView: point, imgSize: self.image.size, viewSize: self.imageView.bounds.size))
+        self.xmarks.append(xmark)
+        self.imageView.addSubview(xmark)
+        
+        if self.coords.count == 4 {
             self.imageView.isUserInteractionEnabled = false
+            self.okButton.isHidden = false
         }
     }
+    
+    @objc func undoAction(sender: UIButton) {
+        if self.isOverlay {
+            self.imageView.image = self.image
+            self.isOverlay = false
+        } else {
+            if self.coords.count == 0 {
+                self.dismiss(animated: true, completion: nil)
+            } else {
+                self.coords.popLast()
+                let xmark = self.xmarks.popLast()
+                xmark?.removeFromSuperview()
+                self.imageView.isUserInteractionEnabled = true
+            }
+        }
+    }
+    
+    @objc func okAction(sender: UIButton) {
+        startAnimating(CGSize(width: 80, height: 80), message: "Processing...", type: NVActivityIndicatorType.pacman, color: #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1), backgroundColor: UIColor(displayP3Red: 128, green: 128, blue: 128, alpha: 0.3), textColor: #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1))
+        DispatchQueue.global().async {
+            let overlayImg: UIImage! = CVHelper.makeOverlayMask(image: self.image, coords: self.coords)
+            DispatchQueue.main.async {
+                self.stopAnimating()
+                self.okButton.isHidden = true
+                self.coords.removeAll()
+                for xmark in self.xmarks {
+                    xmark.removeFromSuperview()
+                }
+                self.xmarks.removeAll()
+                self.imageView.image = overlayImg
+                self.isOverlay = true
+            }
+        }
+    }
+    
 }
 
-extension UIImage {
-    func resizeByLonger(screenSize: CGSize) -> UIImage {
-        let height = self.size.height
-        let width = self.size.width
-        let toheight: CGFloat
-        let towidth: CGFloat
-        
-        if height < width {
-            toheight =  height * screenSize.width / width
-            towidth = screenSize.width
-        } else {
-            toheight = screenSize.height
-            towidth = width * screenSize.height / height
-        }
-        
-        let tosize = CGSize(width: towidth, height: toheight)
-        UIGraphicsBeginImageContextWithOptions(tosize, false, UIScreen.main.scale)
-        self.draw(in: CGRect(x: 0, y: 0, width: towidth, height: toheight))
-        let toimage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return toimage!
+
+func getImageViewFrame(image: UIImage) -> CGRect {
+    let imSize = image.size
+    let screenSize = UIScreen.main.bounds.size
+    let vheight: CGFloat
+    let vwidth: CGFloat
+    
+    if imSize.height < imSize.width {
+        vheight = imSize.height * screenSize.width / imSize.width
+        vwidth = screenSize.width
+    } else {
+        vheight = screenSize.height
+        vwidth = imSize.width * screenSize.height / imSize.height
     }
+    
+    let origin: CGPoint
+    if imSize.height < imSize.width {
+        origin = CGPoint(x: 0, y: (screenSize.height - vheight) / 2)
+    } else {
+        origin = CGPoint(x: 0, y: 0)
+    }
+    
+    let frame = CGRect(origin: origin, size: CGSize(width: vwidth, height: vheight))
+    return frame
+}
+
+
+func getCoordsInImage(coordsInView: CGPoint, imgSize: CGSize, viewSize: CGSize) -> Array<Int> {
+    let x = coordsInView.x * imgSize.width / viewSize.width
+    let y = coordsInView.y * imgSize.height / viewSize.height
+    return [Int(x), Int(y)]
 }

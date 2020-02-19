@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0592DBE1A1E4C4A3948130AB /* libPods-vos_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB27019FB13F5D80AFD24517 /* libPods-vos_ios.a */; };
+		361342F623FD1F6800418F38 /* dextr.pt in Resources */ = {isa = PBXBuildFile; fileRef = 361342F523FD1F6800418F38 /* dextr.pt */; };
+		361342FA23FD578500418F38 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 361342F923FD578500418F38 /* .gitignore */; };
 		363DEE1F23FA36300053E756 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363DEE1E23FA36300053E756 /* AppDelegate.swift */; };
 		363DEE2123FA36300053E756 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363DEE2023FA36300053E756 /* SceneDelegate.swift */; };
 		363DEE2323FA36300053E756 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363DEE2223FA36300053E756 /* ViewController.swift */; };
@@ -17,10 +19,11 @@
 		363DEE3323FA366C0053E756 /* DrawPointController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363DEE3223FA366C0053E756 /* DrawPointController.swift */; };
 		3676C62123FC2FA100F06008 /* CVHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3676C62023FC2FA100F06008 /* CVHelper.mm */; };
 		3676C62423FC2FF900F06008 /* DEXTR.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3676C62323FC2FF900F06008 /* DEXTR.mm */; };
-		3676C62823FC304400F06008 /* dextr.pt in Resources */ = {isa = PBXBuildFile; fileRef = 3676C62723FC304400F06008 /* dextr.pt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		361342F523FD1F6800418F38 /* dextr.pt */ = {isa = PBXFileReference; lastKnownFileType = file; path = dextr.pt; sourceTree = "<group>"; };
+		361342F923FD578500418F38 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = SOURCE_ROOT; };
 		363DEE1B23FA36300053E756 /* vos_ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vos_ios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		363DEE1E23FA36300053E756 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		363DEE2023FA36300053E756 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -34,7 +37,6 @@
 		3676C62023FC2FA100F06008 /* CVHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CVHelper.mm; sourceTree = "<group>"; };
 		3676C62323FC2FF900F06008 /* DEXTR.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DEXTR.mm; sourceTree = "<group>"; };
 		3676C62523FC301700F06008 /* DEXTR.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DEXTR.h; sourceTree = "<group>"; };
-		3676C62723FC304400F06008 /* dextr.pt */ = {isa = PBXFileReference; lastKnownFileType = file; path = dextr.pt; sourceTree = "<group>"; };
 		36990FD923FABEC500CDE2AB /* vos_ios-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "vos_ios-Bridging-Header.h"; sourceTree = "<group>"; };
 		85BB72DA8BDD1E5B6060864B /* Pods-vos_ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vos_ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-vos_ios/Pods-vos_ios.debug.xcconfig"; sourceTree = "<group>"; };
 		C9979904DB85D131CFFF4CA2 /* Pods-vos_ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vos_ios.release.xcconfig"; path = "Pods/Target Support Files/Pods-vos_ios/Pods-vos_ios.release.xcconfig"; sourceTree = "<group>"; };
@@ -81,11 +83,12 @@
 				363DEE1E23FA36300053E756 /* AppDelegate.swift */,
 				363DEE2023FA36300053E756 /* SceneDelegate.swift */,
 				363DEE2223FA36300053E756 /* ViewController.swift */,
-				363DEE2423FA36300053E756 /* Main.storyboard */,
+				36990FD923FABEC500CDE2AB /* vos_ios-Bridging-Header.h */,
 				363DEE2723FA36370053E756 /* Assets.xcassets */,
+				363DEE2423FA36300053E756 /* Main.storyboard */,
 				363DEE2923FA36370053E756 /* LaunchScreen.storyboard */,
 				363DEE2C23FA36370053E756 /* Info.plist */,
-				36990FD923FABEC500CDE2AB /* vos_ios-Bridging-Header.h */,
+				361342F923FD578500418F38 /* .gitignore */,
 			);
 			path = vos_ios;
 			sourceTree = "<group>";
@@ -111,7 +114,7 @@
 		3676C62623FC303000F06008 /* model */ = {
 			isa = PBXGroup;
 			children = (
-				3676C62723FC304400F06008 /* dextr.pt */,
+				361342F523FD1F6800418F38 /* dextr.pt */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -193,8 +196,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3676C62823FC304400F06008 /* dextr.pt in Resources */,
+				361342FA23FD578500418F38 /* .gitignore in Resources */,
 				363DEE2B23FA36370053E756 /* LaunchScreen.storyboard in Resources */,
+				361342F623FD1F6800418F38 /* dextr.pt in Resources */,
 				363DEE2823FA36370053E756 /* Assets.xcassets in Resources */,
 				363DEE2623FA36300053E756 /* Main.storyboard in Resources */,
 			);

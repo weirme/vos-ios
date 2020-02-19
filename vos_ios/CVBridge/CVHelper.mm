@@ -12,7 +12,7 @@
 #import "../TorchBridge/DEXTR.h"
 
 #define PAD 50
-#define THRES 0.8
+#define THRES 0.85
 #define RESIZE_HEIGHT 512
 #define RESIZE_WIDTH 512
 #define ALPHA 0.5
@@ -20,16 +20,14 @@
 const std::string DEXTR_PATH = [[NSBundle mainBundle] pathForResource:@"dextr" ofType:@"pt"].UTF8String;
 
 
-static void split(const std::string& s, std::vector<int>& sv, const char delim=' ') {
-    sv.clear();
-    std::istringstream iss(s);
-    std::string temp;
-
-    while (std::getline(iss, temp, delim)) {
-        sv.push_back(std::stoi(temp));
+static void splitCoords2CVec(NSArray<NSArray*>* coords, std::vector<int>& xcoords, std::vector<int>& ycoords) {
+    for (id point in coords) {
+        int x, y;
+        [point[0] getValue:&x];
+        xcoords.push_back(x);
+        [point[1] getValue:&y];
+        ycoords.push_back(y);
     }
-
-    return;
 }
 
 
@@ -101,17 +99,15 @@ static cv::Mat crop2FullMask(cv::Mat cropMask, std::vector<int> bbox, int width,
 
 @implementation CVHelper
 
-+ (UIImage*) cropImage: (UIImage*) image withExtremePoints: (NSString*) points {
-    std::vector<int> coords;
-    split(std::string([points UTF8String]), coords, '|');
-    assert(coords.size() == 8);
-    std::vector<int> xcoords = {coords[0], coords[2], coords[4], coords[6]};
-    std::vector<int> ycoords = {coords[1], coords[3], coords[5], coords[7]};
++ (UIImage*) makeOverlayMaskOfImage: (UIImage*) image withExtremePoints: (NSArray<NSArray*>*) coords {
+    std::vector<int> xcoords;
+    std::vector<int> ycoords;
+    splitCoords2CVec(coords, xcoords, ycoords);
     
-    cv::Mat imgMat;
-    UIImageToMat(image, imgMat, false);
     int imgHeight = image.size.height;
     int imgWidth = image.size.width;
+    cv::Mat imgMat = cv::Mat(imgHeight, imgWidth, CV_8UC4);
+    UIImageToMat(image, imgMat);
     
     std::vector<int> bbox = getBbox(image, xcoords, ycoords, PAD);
     cv::Mat cropMat = cropFromBbox(imgMat, bbox);
@@ -153,16 +149,13 @@ static cv::Mat crop2FullMask(cv::Mat cropMask, std::vector<int> bbox, int width,
     cv::Mat mask = crop2FullMask(pred, bbox, imgWidth, imgHeight, PAD);
     cv::Mat rgbMask = cv::Mat(imgHeight, imgWidth, CV_8UC3);
     std::vector<cv::Mat> rgbChannels;
+    rgbChannels.push_back(cv::Mat::zeros(imgHeight, imgWidth, CV_8UC1));
+    rgbChannels.push_back(cv::Mat::zeros(imgHeight, imgWidth, CV_8UC1));
     rgbChannels.push_back(mask);
-    rgbChannels.push_back(cv::Mat::zeros(imgHeight, imgWidth, CV_8UC1));
-    rgbChannels.push_back(cv::Mat::zeros(imgHeight, imgWidth, CV_8UC1));
     cv::merge(rgbChannels, rgbMask);
     
     cv::Mat overlay = cv::Mat::zeros(imgHeight, imgWidth, CV_8UC3);
     cv::cvtColor(imgMat, imgMat, cv::COLOR_RGBA2RGB);
-//    mergeMask(imgMat, mask, overlay);
-    std::cout << rgbMask.channels();
-    std::cout << imgMat.channels();
     cv::addWeighted(rgbMask, ALPHA, imgMat, ALPHA, 1 - ALPHA, overlay);
     
     UIImage* img = MatToUIImage(overlay);
