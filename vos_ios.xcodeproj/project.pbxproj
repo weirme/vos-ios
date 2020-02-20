@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0592DBE1A1E4C4A3948130AB /* libPods-vos_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB27019FB13F5D80AFD24517 /* libPods-vos_ios.a */; };
 		361342F623FD1F6800418F38 /* dextr.pt in Resources */ = {isa = PBXBuildFile; fileRef = 361342F523FD1F6800418F38 /* dextr.pt */; };
-		361342FA23FD578500418F38 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 361342F923FD578500418F38 /* .gitignore */; };
 		363DEE1F23FA36300053E756 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363DEE1E23FA36300053E756 /* AppDelegate.swift */; };
 		363DEE2123FA36300053E756 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363DEE2023FA36300053E756 /* SceneDelegate.swift */; };
 		363DEE2323FA36300053E756 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363DEE2223FA36300053E756 /* ViewController.swift */; };
@@ -23,7 +22,6 @@
 
 /* Begin PBXFileReference section */
 		361342F523FD1F6800418F38 /* dextr.pt */ = {isa = PBXFileReference; lastKnownFileType = file; path = dextr.pt; sourceTree = "<group>"; };
-		361342F923FD578500418F38 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = SOURCE_ROOT; };
 		363DEE1B23FA36300053E756 /* vos_ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vos_ios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		363DEE1E23FA36300053E756 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		363DEE2023FA36300053E756 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -88,7 +86,6 @@
 				363DEE2423FA36300053E756 /* Main.storyboard */,
 				363DEE2923FA36370053E756 /* LaunchScreen.storyboard */,
 				363DEE2C23FA36370053E756 /* Info.plist */,
-				361342F923FD578500418F38 /* .gitignore */,
 			);
 			path = vos_ios;
 			sourceTree = "<group>";
@@ -196,7 +193,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				361342FA23FD578500418F38 /* .gitignore in Resources */,
 				363DEE2B23FA36370053E756 /* LaunchScreen.storyboard in Resources */,
 				361342F623FD1F6800418F38 /* dextr.pt in Resources */,
 				363DEE2823FA36370053E756 /* Assets.xcassets in Resources */,

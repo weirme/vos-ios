@@ -1,5 +1,6 @@
 import UIKit
 import NVActivityIndicatorView
+import ImageScrollView
 
 let buttonWidth: CGFloat = 50.0
 let buttonHeight: CGFloat = 30.0
@@ -10,9 +11,9 @@ class DrawPointController: UIViewController, NVActivityIndicatorViewable {
     
     var undoButton: UIButton!
     var okButton: UIButton!
-    
-    var imageView: UIImageView!
+    var scrollView: ImageScrollView!
     var image: UIImage!
+    var tapGesture: UITapGestureRecognizer!
 
     var coords: [[Int]] = []
     var xmarks: [UIImageView] = []
@@ -22,18 +23,22 @@ class DrawPointController: UIViewController, NVActivityIndicatorViewable {
         super.viewDidLoad()
         self.view.backgroundColor = .black
         self.addButtons()
-        self.initImageView()
+        self.initScrollView()
     }
     
-    func initImageView() {
-        let frame: CGRect = getImageViewFrame(image: self.image)
-        self.imageView = UIImageView(frame: frame)
-        self.imageView.image = self.image
-        self.view.addSubview(self.imageView)
+    func initScrollView() {
+        let screenSize = UIScreen.main.bounds.size
+        let frame: CGRect = CGRect(x: 0, y: 2 * buttonPad + buttonHeight, width: screenSize.width, height: screenSize.height - 2 * buttonPad - buttonHeight)
+        self.scrollView = ImageScrollView(frame: frame)
+        self.scrollView.setup()
+        self.scrollView.imageContentMode = .aspectFit
+        self.scrollView.initialOffset = .center
+        self.scrollView.display(image: self.image)
+        self.view.addSubview(self.scrollView)
         
-        self.imageView.isUserInteractionEnabled = true
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapAction(tap:)))
-        self.imageView.addGestureRecognizer(tapGesture)
+        self.scrollView.isUserInteractionEnabled = true
+        self.tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapAction(tap:)))
+        self.scrollView.zoomView?.addGestureRecognizer(tapGesture)
     }
     
     func addButtons() {
@@ -57,43 +62,45 @@ class DrawPointController: UIViewController, NVActivityIndicatorViewable {
     }
     
     @objc func tapAction(tap: UITapGestureRecognizer) {
-        let point = tap.location(in: self.imageView)
-        let config =  UIImage.SymbolConfiguration(pointSize: 8, weight: .black)
+        let point = tap.location(in: self.scrollView.zoomView)
+        let config =  UIImage.SymbolConfiguration(pointSize: self.image.size.width / 50, weight: .black)
         let xmark = UIImageView(image: UIImage(systemName: "xmark", withConfiguration: config))
         xmark.frame.origin = CGPoint(
             x: point.x - xmark.frame.size.width / 2,
             y: point.y - xmark.frame.size.height / 2)
         xmark.tintColor = #colorLiteral(red: 0.5725490451, green: 0, blue: 0.2313725501, alpha: 1)
         
-        self.coords.append(
-        getCoordsInImage(coordsInView: point, imgSize: self.image.size, viewSize: self.imageView.bounds.size))
+        self.coords.append([Int(point.x), Int(point.y)])
         self.xmarks.append(xmark)
-        self.imageView.addSubview(xmark)
+        self.scrollView.zoomView?.addSubview(xmark)
         
         if self.coords.count == 4 {
-            self.imageView.isUserInteractionEnabled = false
+            self.tapGesture.isEnabled = false
             self.okButton.isHidden = false
         }
     }
     
     @objc func undoAction(sender: UIButton) {
         if self.isOverlay {
-            self.imageView.image = self.image
+            self.scrollView.display(image: self.image)
+            self.scrollView.zoomView?.addGestureRecognizer(self.tapGesture)
             self.isOverlay = false
         } else {
             if self.coords.count == 0 {
                 self.dismiss(animated: true, completion: nil)
             } else {
-                self.coords.popLast()
+                let _ = self.coords.popLast()
                 let xmark = self.xmarks.popLast()
                 xmark?.removeFromSuperview()
-                self.imageView.isUserInteractionEnabled = true
+                self.okButton.isHidden = true
             }
         }
+        self.tapGesture.isEnabled = true
     }
     
     @objc func okAction(sender: UIButton) {
         startAnimating(CGSize(width: 80, height: 80), message: "Processing...", type: NVActivityIndicatorType.pacman, color: #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1), backgroundColor: UIColor(displayP3Red: 128, green: 128, blue: 128, alpha: 0.3), textColor: #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1))
+        
         DispatchQueue.global().async {
             let overlayImg: UIImage! = CVHelper.makeOverlayMask(image: self.image, coords: self.coords)
             DispatchQueue.main.async {
@@ -104,43 +111,10 @@ class DrawPointController: UIViewController, NVActivityIndicatorViewable {
                     xmark.removeFromSuperview()
                 }
                 self.xmarks.removeAll()
-                self.imageView.image = overlayImg
+                self.scrollView.display(image: overlayImg)
                 self.isOverlay = true
             }
         }
     }
     
-}
-
-
-func getImageViewFrame(image: UIImage) -> CGRect {
-    let imSize = image.size
-    let screenSize = UIScreen.main.bounds.size
-    let vheight: CGFloat
-    let vwidth: CGFloat
-    
-    if imSize.height < imSize.width {
-        vheight = imSize.height * screenSize.width / imSize.width
-        vwidth = screenSize.width
-    } else {
-        vheight = screenSize.height - buttonHeight - 2 * buttonPad
-        vwidth = imSize.width * screenSize.height / imSize.height
-    }
-    
-    let origin: CGPoint
-    if imSize.height < imSize.width {
-        origin = CGPoint(x: 0, y: (screenSize.height - vheight) / 2)
-    } else {
-        origin = CGPoint(x: 0, y: buttonHeight + 2 * buttonPad)
-    }
-    
-    let frame = CGRect(origin: origin, size: CGSize(width: vwidth, height: vheight))
-    return frame
-}
-
-
-func getCoordsInImage(coordsInView: CGPoint, imgSize: CGSize, viewSize: CGSize) -> Array<Int> {
-    let x = coordsInView.x * imgSize.width / viewSize.width
-    let y = coordsInView.y * imgSize.height / viewSize.height
-    return [Int(x), Int(y)]
 }
