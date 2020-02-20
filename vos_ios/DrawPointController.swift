@@ -1,6 +1,10 @@
 import UIKit
 import NVActivityIndicatorView
 
+let buttonWidth: CGFloat = 50.0
+let buttonHeight: CGFloat = 30.0
+let buttonPad: CGFloat = 10.0
+
 
 class DrawPointController: UIViewController, NVActivityIndicatorViewable {
     
@@ -33,18 +37,15 @@ class DrawPointController: UIViewController, NVActivityIndicatorViewable {
     }
     
     func addButtons() {
-        let width = 50
-        let height = 30
-        let pad = 10
         let screenSize = UIScreen.main.bounds.size
         
-        self.undoButton = UIButton(frame: CGRect(x: pad, y: pad, width: width, height: height))
+        self.undoButton = UIButton(frame: CGRect(x: buttonPad, y: buttonPad, width: buttonWidth, height: buttonHeight))
         self.undoButton.setTitle("Undo", for: .normal)
         self.undoButton.setTitleColor(.red, for: .normal)
         self.undoButton.contentHorizontalAlignment = .leading
         self.undoButton.addTarget(self, action: #selector(undoAction(sender:)), for: .touchUpInside)
         
-        self.okButton = UIButton(frame: CGRect(x: Int(screenSize.width) - pad - width, y: pad, width: width, height: height))
+        self.okButton = UIButton(frame: CGRect(x: screenSize.width - buttonPad - buttonWidth, y: buttonPad, width: buttonWidth, height: buttonHeight))
         self.okButton.setTitle("OK", for: .normal)
         self.okButton.setTitleColor(.blue, for: .normal)
         self.okButton.contentHorizontalAlignment = .trailing
@@ -122,7 +123,7 @@ func getImageViewFrame(image: UIImage) -> CGRect {
         vheight = imSize.height * screenSize.width / imSize.width
         vwidth = screenSize.width
     } else {
-        vheight = screenSize.height
+        vheight = screenSize.height - buttonHeight - 2 * buttonPad
         vwidth = imSize.width * screenSize.height / imSize.height
     }
     
@@ -130,7 +131,7 @@ func getImageViewFrame(image: UIImage) -> CGRect {
     if imSize.height < imSize.width {
         origin = CGPoint(x: 0, y: (screenSize.height - vheight) / 2)
     } else {
-        origin = CGPoint(x: 0, y: 0)
+        origin = CGPoint(x: 0, y: buttonHeight + 2 * buttonPad)
     }
     
     let frame = CGRect(origin: origin, size: CGSize(width: vwidth, height: vheight))
