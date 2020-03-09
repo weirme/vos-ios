@@ -5,6 +5,7 @@ import AVKit
 class VideoScrollView: UIView {
     
     var scrollView: UIScrollView!
+    var slideView: SlideView!
         
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -16,10 +17,22 @@ class VideoScrollView: UIView {
         self.commonInit()
     }
     
-    func commonInit() {
+    private func commonInit() {
         let bounds = self.bounds
-        self.scrollView = UIScrollView(frame: CGRect(origin: bounds.origin, size: CGSize(width: bounds.width, height: bounds.height)))
+        let scrollHeight = bounds.height / 2
+        let scrollWidth = bounds.width
+        let scrollX = bounds.origin.x
+        let scrollY = bounds.midY - scrollHeight / 2
+        let scrollRect = CGRect(x: scrollX, y: scrollY, width: scrollWidth, height: scrollHeight)
+        
+        self.scrollView = UIScrollView(frame: scrollRect)
+        self.scrollView.contentSize = CGSize(width: scrollWidth, height: scrollHeight)
+        self.scrollView.contentInset = UIEdgeInsets(top: 0, left: scrollWidth, bottom: 0, right: scrollWidth)
+        self.scrollView.showsHorizontalScrollIndicator = false
         self.addSubview(self.scrollView)
+        
+        self.slideView = SlideView(frame: self.scrollView.bounds)
+        self.scrollView.addSubview(self.slideView)
     }
     
     func displayVideo(video: AVAsset) {
@@ -30,12 +43,11 @@ class VideoScrollView: UIView {
         
         let duration = video.duration
         let startTime = CMTime(value: 0, timescale: duration.timescale)
-        let bounds = self.scrollView.bounds
+        let scrollBounds = self.scrollView.bounds
         var frameHeight = CGFloat(0)
         var frameWidth = CGFloat(0)
         var displayHeight = CGFloat(0)
         var displayWidth = CGFloat(0)
-        var originy = CGFloat(0)
         var nFrameDisplay = 0
         
         do {
@@ -48,9 +60,8 @@ class VideoScrollView: UIView {
         
         if frameHeight < frameWidth {
             nFrameDisplay = 4
-            displayWidth = bounds.size.width / CGFloat(nFrameDisplay)
-            displayHeight = bounds.size.height / 2
-            originy = (bounds.height - displayHeight) / 2
+            displayWidth = scrollBounds.size.width / CGFloat(nFrameDisplay)
+            displayHeight = scrollBounds.size.height
         } else {
             // todo
         }
@@ -60,7 +71,7 @@ class VideoScrollView: UIView {
             let t = CMTime(value: Int64(i) * increment, timescale: duration.timescale)
             do {
                 let cgimg = try imageGenerator.copyCGImage(at: t, actualTime: nil)
-                let rect = CGRect(x: CGFloat(i) * displayWidth, y: originy, width: displayWidth, height: displayHeight)
+                let rect = CGRect(x: CGFloat(i) * displayWidth, y: 0, width: displayWidth, height: displayHeight)
                 let imgView = UIImageView(frame: rect)
                 imgView.image = UIImage(cgImage: cgimg)
                 self.scrollView.addSubview(imgView)
@@ -68,6 +79,8 @@ class VideoScrollView: UIView {
                 print(error.localizedDescription)
             }
         }
+        
+        self.scrollView.bringSubviewToFront(self.slideView)
         
     }
     

@@ -16,6 +16,7 @@
 		363DEE2B23FA36370053E756 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 363DEE2923FA36370053E756 /* LaunchScreen.storyboard */; };
 		36E785072415DBD200D2C745 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E785062415DBD200D2C745 /* EditViewController.swift */; };
 		36E785092415E13400D2C745 /* VideoScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E785082415E13300D2C745 /* VideoScrollView.swift */; };
+		36E7850E2416724900D2C745 /* SlideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7850D2416724800D2C745 /* SlideView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		36E785062415DBD200D2C745 /* EditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 		36E785082415E13300D2C745 /* VideoScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoScrollView.swift; sourceTree = "<group>"; wrapsLines = 1; };
 		36E7850A2415F5FF00D2C745 /* video.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = video.mp4; sourceTree = "<group>"; };
+		36E7850D2416724800D2C745 /* SlideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideView.swift; sourceTree = "<group>"; };
 		85BB72DA8BDD1E5B6060864B /* Pods-vos_ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vos_ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-vos_ios/Pods-vos_ios.debug.xcconfig"; sourceTree = "<group>"; };
 		C9979904DB85D131CFFF4CA2 /* Pods-vos_ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vos_ios.release.xcconfig"; path = "Pods/Target Support Files/Pods-vos_ios/Pods-vos_ios.release.xcconfig"; sourceTree = "<group>"; };
 		EB27019FB13F5D80AFD24517 /* libPods-vos_ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-vos_ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -124,6 +126,7 @@
 				363DEE3223FA366C0053E756 /* DrawPointViewController.swift */,
 				36E785062415DBD200D2C745 /* EditViewController.swift */,
 				36E785082415E13300D2C745 /* VideoScrollView.swift */,
+				36E7850D2416724800D2C745 /* SlideView.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -244,6 +247,7 @@
 				36E785092415E13400D2C745 /* VideoScrollView.swift in Sources */,
 				363DEE2123FA36300053E756 /* SceneDelegate.swift in Sources */,
 				36E785072415DBD200D2C745 /* EditViewController.swift in Sources */,
+				36E7850E2416724900D2C745 /* SlideView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
