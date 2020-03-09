@@ -7,7 +7,7 @@ let buttonHeight: CGFloat = 30.0
 let buttonPad: CGFloat = 10.0
 
 
-class DrawPointController: UIViewController, NVActivityIndicatorViewable {
+class DrawPointViewController: UIViewController, NVActivityIndicatorViewable {
     
     var undoButton: UIButton!
     var okButton: UIButton!
@@ -19,12 +19,15 @@ class DrawPointController: UIViewController, NVActivityIndicatorViewable {
     var xmarks: [UIImageView] = []
     var isOverlay = false
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .black
         self.addButtons()
         self.initScrollView()
     }
+    
+    // MARK: - Init view
     
     func initScrollView() {
         let screenSize = UIScreen.main.bounds.size
@@ -60,6 +63,8 @@ class DrawPointController: UIViewController, NVActivityIndicatorViewable {
         self.view.addSubview(self.undoButton)
         self.view.addSubview(self.okButton)
     }
+    
+    // MARK: - Event actions
     
     @objc func tapAction(tap: UITapGestureRecognizer) {
         let point = tap.location(in: self.scrollView.zoomView)

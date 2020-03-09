@@ -28,7 +28,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let image : UIImage = previewImageFromVideo(url: videoURL)!
 
         picker.dismiss(animated: true, completion: {
-            let drawPointView = DrawPointController()
+            let drawPointView = DrawPointViewController()
             drawPointView.image = image
             self.present(drawPointView, animated: true, completion: nil)
         })
