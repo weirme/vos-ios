@@ -19,7 +19,7 @@ class VideoScrollView: UIView {
     
     private func commonInit() {
         let bounds = self.bounds
-        let scrollHeight = bounds.height / 2
+        let scrollHeight = bounds.height * 0.75
         let scrollWidth = bounds.width
         let scrollX = bounds.origin.x
         let scrollY = bounds.midY - scrollHeight / 2
@@ -27,12 +27,12 @@ class VideoScrollView: UIView {
         
         self.scrollView = UIScrollView(frame: scrollRect)
         self.scrollView.contentSize = CGSize(width: scrollWidth, height: scrollHeight)
-        self.scrollView.contentInset = UIEdgeInsets(top: 0, left: scrollWidth, bottom: 0, right: scrollWidth)
+        self.scrollView.contentInset = UIEdgeInsets(top: 0, left: scrollWidth / 2, bottom: 0, right: scrollWidth / 2)
         self.scrollView.showsHorizontalScrollIndicator = false
         self.addSubview(self.scrollView)
         
         self.slideView = SlideView(frame: self.scrollView.bounds)
-        self.scrollView.addSubview(self.slideView)
+        
     }
     
     func displayVideo(video: AVAsset) {
@@ -80,8 +80,8 @@ class VideoScrollView: UIView {
             }
         }
         
+        self.scrollView.addSubview(self.slideView)
         self.scrollView.bringSubviewToFront(self.slideView)
-        
     }
     
 }

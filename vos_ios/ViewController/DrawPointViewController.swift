@@ -51,13 +51,13 @@ class DrawPointViewController: UIViewController, NVActivityIndicatorViewable {
         self.undoButton.setTitle("Undo", for: .normal)
         self.undoButton.setTitleColor(.red, for: .normal)
         self.undoButton.contentHorizontalAlignment = .leading
-        self.undoButton.addTarget(self, action: #selector(undoAction(sender:)), for: .touchUpInside)
+        self.undoButton.addTarget(self, action: #selector(self.undoAction(sender:)), for: .touchUpInside)
         
         self.okButton = UIButton(frame: CGRect(x: screenSize.width - buttonPad - buttonWidth, y: buttonPad, width: buttonWidth, height: buttonHeight))
         self.okButton.setTitle("OK", for: .normal)
         self.okButton.setTitleColor(.blue, for: .normal)
         self.okButton.contentHorizontalAlignment = .trailing
-        self.okButton.addTarget(self, action: #selector(okAction(sender:)), for: .touchUpInside)
+        self.okButton.addTarget(self, action: #selector(self.okAction(sender:)), for: .touchUpInside)
         self.okButton.isHidden = true
         
         self.view.addSubview(self.undoButton)
