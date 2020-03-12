@@ -61,7 +61,7 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U3Y-a2-EqN" customClass="ImageScrollView" customModule="ImageScrollView">
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U3Y-a2-EqN" customClass="VideoPlayView" customModule="vos_ios" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="53" width="375" height="317"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
@@ -87,10 +87,9 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                                     </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ocg-d2-nJo">
-                                        <rect key="frame" x="0.0" y="0.0" width="1" height="253"/>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qDp-ng-rUe" customClass="IndicatorLineView" customModule="vos_ios" customModuleProvider="target">
+                                        <rect key="frame" x="175" y="0.0" width="25" height="253"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -104,6 +103,7 @@
                         <outlet property="backScrollView" destination="vMf-XR-e0b" id="ch2-Oo-x9m"/>
                         <outlet property="controlScrollView" destination="i1x-yk-0C3" id="Z4b-cf-vge"/>
                         <outlet property="foreScrollView" destination="epg-3p-aFi" id="vVs-w8-Pzy"/>
+                        <outlet property="timeIndicatorView" destination="qDp-ng-rUe" id="XJa-SH-BB7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4rr-Y6-rsF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

@@ -2,10 +2,25 @@ import UIKit
 import AVKit
 
 
-class VideoScrollView: UIView {
+protocol VideoScrollDelegate {
+    func videoScrollToTime(videoScrollView: VideoScrollView, pos: Float)
+}
+
+
+class VideoScrollView: UIView, UIScrollViewDelegate {
     
     var scrollView: UIScrollView!
     var slideView: SlideView!
+    
+    var delegate: VideoScrollDelegate?
+    var offset: CGPoint {
+        get {
+            return self.scrollView.contentOffset
+        }
+        set {
+            self.scrollView.setContentOffset(newValue, animated: true)
+        }
+    }
         
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -18,47 +33,32 @@ class VideoScrollView: UIView {
     }
     
     private func commonInit() {
-        let bounds = self.bounds
-        let scrollHeight = bounds.height * 0.75
-        let scrollWidth = bounds.width
-        let scrollX = bounds.origin.x
-        let scrollY = bounds.midY - scrollHeight / 2
+        let scrollHeight = self.bounds.height * 0.7
+        let scrollWidth = self.bounds.width * 0.8
+        let scrollX = self.bounds.width * 0.2
+        let scrollY = self.bounds.midY - scrollHeight / 2
         let scrollRect = CGRect(x: scrollX, y: scrollY, width: scrollWidth, height: scrollHeight)
         
         self.scrollView = UIScrollView(frame: scrollRect)
         self.scrollView.contentSize = CGSize(width: scrollWidth, height: scrollHeight)
-        self.scrollView.contentInset = UIEdgeInsets(top: 0, left: scrollWidth / 2, bottom: 0, right: scrollWidth / 2)
+        self.scrollView.contentInset = UIEdgeInsets(top: 0, left: scrollWidth, bottom: 0, right: scrollWidth)
         self.scrollView.showsHorizontalScrollIndicator = false
+        self.scrollView.delegate = self
         self.addSubview(self.scrollView)
         
         self.slideView = SlideView(frame: self.scrollView.bounds)
-        
     }
-    
-    func displayVideo(video: AVAsset) {
-        let imageGenerator = AVAssetImageGenerator(asset: video)
-        imageGenerator.appliesPreferredTrackTransform = true
-        imageGenerator.requestedTimeToleranceBefore = CMTime(value: 1, timescale: 100)
-        imageGenerator.requestedTimeToleranceAfter = CMTime(value: 1, timescale: 100)
         
-        let duration = video.duration
-        let startTime = CMTime(value: 0, timescale: duration.timescale)
+    func displayVideo(video: AVAsset) {
         let scrollBounds = self.scrollView.bounds
-        var frameHeight = CGFloat(0)
-        var frameWidth = CGFloat(0)
+        let duration = video.duration
+        let track = video.tracks.first!
+        let resolution = track.naturalSize.applying(track.preferredTransform)
         var displayHeight = CGFloat(0)
         var displayWidth = CGFloat(0)
         var nFrameDisplay = 0
         
-        do {
-            let cgimg = try imageGenerator.copyCGImage(at: startTime, actualTime: nil)
-            frameHeight = CGFloat(cgimg.height)
-            frameWidth = CGFloat(cgimg.width)
-        } catch {
-            print(error.localizedDescription)
-        }
-        
-        if frameHeight < frameWidth {
+        if resolution.height < resolution.width {
             nFrameDisplay = 4
             displayWidth = scrollBounds.size.width / CGFloat(nFrameDisplay)
             displayHeight = scrollBounds.size.height
@@ -66,6 +66,10 @@ class VideoScrollView: UIView {
             // todo
         }
         
+        let imageGenerator = AVAssetImageGenerator(asset: video)
+        imageGenerator.appliesPreferredTrackTransform = true
+        imageGenerator.requestedTimeToleranceBefore = CMTime(value: 1, timescale: 15)
+        imageGenerator.requestedTimeToleranceAfter = CMTime(value: 1, timescale: 15)
         let increment = duration.value / Int64(nFrameDisplay)
         for i in 0..<nFrameDisplay {
             let t = CMTime(value: Int64(i) * increment, timescale: duration.timescale)
@@ -82,6 +86,12 @@ class VideoScrollView: UIView {
         
         self.scrollView.addSubview(self.slideView)
         self.scrollView.bringSubviewToFront(self.slideView)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let trans: CGPoint = scrollView.contentOffset
+        let pos = (self.frame.midX - scrollView.frame.origin.x + trans.x) / scrollView.frame.width
+        self.delegate?.videoScrollToTime(videoScrollView: self, pos: Float(pos))
     }
     
 }

@@ -17,16 +17,16 @@ class SlideView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.commonInit(frame: frame)
+        self.commonInit()
         
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        self.commonInit(frame: self.frame)
+        self.commonInit()
     }
     
-    private func commonInit(frame: CGRect) {
+    private func commonInit() {
         self.backgroundColor = .clear
         let selfSize = self.bounds.size
         
@@ -74,23 +74,22 @@ class SlideView: UIView {
         let view: UIView = pan.view!
         let superview: UIView = view.superview!
         let origin: CGPoint = view.frame.origin
-        let trans: CGPoint = pan.translation(in: superview)
+        let trans: CGPoint = pan.translation(in: view)
         
         if view.tag == leftTag {
             if origin.x + trans.x >= 0 && origin.x + trans.x + slideImageWidth <= self.endView.frame.minX {
-                view.frame = CGRect(x: origin.x + trans.x, y: 0, width: slideImageWidth, height: view.frame.height)
+                view.frame = view.frame.offsetBy(dx: trans.x, dy: 0)
                 self.leftShadowView.frame = CGRect(x: 0, y: 0, width: view.frame.minX, height: view.frame.height)
             }
         } else if view.tag == rightTag {
             if origin.x + trans.x >= self.startView.frame.maxX && origin.x + trans.x + slideImageWidth <= superview.frame.maxX {
-                view.frame = CGRect(x: origin.x + trans.x, y: 0, width: slideImageWidth, height: view.frame.height)
+                view.frame = view.frame.offsetBy(dx: trans.x, dy: 0)
                 self.rightShadowView.frame = CGRect(x: view.frame.maxX, y: 0, width: superview.frame.maxX - view.frame.maxX, height: view.frame.height)
             }
         }
         
         self.topLineView.frame = CGRect(x: self.startView.frame.origin.x, y: 0, width: self.endView.frame.maxX - self.startView.frame.minX, height: slideLineHeight)
         self.bottomLineView.frame = CGRect(x: self.startView.frame.origin.x, y: superview.frame.height - slideLineHeight, width: self.endView.frame.maxX - self.startView.frame.minX, height: slideLineHeight)
-        
         
         pan.setTranslation(CGPoint.zero, in: view)
     }
