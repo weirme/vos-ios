@@ -1,9 +1,5 @@
 import UIKit
 
-let slideImageWidth: CGFloat = 15.0
-let slideLineHeight: CGFloat = 4.0
-let leftTag: Int = 1
-let rightTag: Int = 2
 
 class SlideView: UIView {
     
@@ -33,6 +29,8 @@ class SlideView: UIView {
         self.startView = UIImageView(frame: CGRect(x: 0, y: 0, width: slideImageWidth, height: selfSize.height))
         self.startView.image = UIImage(named: "left")
         self.startView.tag = leftTag
+        self.startView.layer.cornerRadius = 5
+        self.startView.clipsToBounds = true
         let leftPanGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panAction(pan:)))
         leftPanGesture.maximumNumberOfTouches = 1
         leftPanGesture.minimumNumberOfTouches = 1
@@ -43,6 +41,8 @@ class SlideView: UIView {
         self.endView = UIImageView(frame: CGRect(x: selfSize.width - slideImageWidth, y: 0, width: slideImageWidth, height: selfSize.height))
         self.endView.image = UIImage(named: "right")
         self.endView.tag = rightTag
+        self.endView.layer.cornerRadius = 5
+        self.endView.clipsToBounds = true
         let rightPanGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panAction(pan:)))
         rightPanGesture.maximumNumberOfTouches = 1
         rightPanGesture.minimumNumberOfTouches = 1
@@ -52,22 +52,25 @@ class SlideView: UIView {
         
         self.topLineView = UIView(frame: CGRect(x: 0, y: 0, width: selfSize.width, height: slideLineHeight))
         self.topLineView.backgroundColor = .white
+        self.topLineView.layer.cornerRadius = 5
+        self.topLineView.clipsToBounds = true
         self.addSubview(self.topLineView)
         
         self.bottomLineView =  UIView(frame: CGRect(x: 0, y: selfSize.height - slideLineHeight, width: selfSize.width, height: slideLineHeight))
         self.bottomLineView.backgroundColor = .white
+        self.bottomLineView.layer.cornerRadius = 5
+        self.bottomLineView.clipsToBounds = true
         self.addSubview(self.bottomLineView)
         
-        self.leftShadowView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: selfSize.height))
+        self.leftShadowView = UIView(frame: CGRect(x: 0, y: slideLineHeight, width: 0, height: selfSize.height - 2 * slideLineHeight))
         self.leftShadowView.backgroundColor = .black
-        self.leftShadowView.alpha = 0.8
+        self.leftShadowView.alpha = shadowAlpha
         self.addSubview(self.leftShadowView)
         
-        self.rightShadowView = UIView(frame: CGRect(x: selfSize.width, y: 0, width: 0, height: selfSize.height))
+        self.rightShadowView = UIView(frame: CGRect(x: selfSize.width, y: slideLineHeight, width: 0, height: selfSize.height - 2 * slideLineHeight))
         self.rightShadowView.backgroundColor = .black
-        self.rightShadowView.alpha = 0.8
+        self.rightShadowView.alpha = shadowAlpha
         self.addSubview(self.rightShadowView)
-    
     }
     
     @objc func panAction(pan: UIPanGestureRecognizer) {
@@ -79,12 +82,12 @@ class SlideView: UIView {
         if view.tag == leftTag {
             if origin.x + trans.x >= 0 && origin.x + trans.x + slideImageWidth <= self.endView.frame.minX {
                 view.frame = view.frame.offsetBy(dx: trans.x, dy: 0)
-                self.leftShadowView.frame = CGRect(x: 0, y: 0, width: view.frame.minX, height: view.frame.height)
+                self.leftShadowView.frame = CGRect(x: 0, y: slideLineHeight, width: view.frame.minX, height: view.frame.height - 2 * slideLineHeight)
             }
         } else if view.tag == rightTag {
             if origin.x + trans.x >= self.startView.frame.maxX && origin.x + trans.x + slideImageWidth <= superview.frame.maxX {
                 view.frame = view.frame.offsetBy(dx: trans.x, dy: 0)
-                self.rightShadowView.frame = CGRect(x: view.frame.maxX, y: 0, width: superview.frame.maxX - view.frame.maxX, height: view.frame.height)
+                self.rightShadowView.frame = CGRect(x: view.frame.maxX, y: slideLineHeight, width: superview.frame.maxX - view.frame.maxX, height: view.frame.height - 2 * slideLineHeight)
             }
         }
         

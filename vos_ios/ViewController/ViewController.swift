@@ -40,7 +40,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         imageGenerator.appliesPreferredTrackTransform = true
         
         var time = asset.duration
-        time.value = min(time.value,2)
+        time.value = min(time.value, 2)
         
         do {
             let imageRef = try imageGenerator.copyCGImage(at: time, actualTime: nil)

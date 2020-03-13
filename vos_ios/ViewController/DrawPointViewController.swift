@@ -2,10 +2,6 @@ import UIKit
 import NVActivityIndicatorView
 import ImageScrollView
 
-let buttonWidth: CGFloat = 50.0
-let buttonHeight: CGFloat = 30.0
-let buttonPad: CGFloat = 10.0
-
 
 class DrawPointViewController: UIViewController, NVActivityIndicatorViewable {
     
@@ -30,8 +26,7 @@ class DrawPointViewController: UIViewController, NVActivityIndicatorViewable {
     // MARK: - Init view
     
     func initScrollView() {
-        let screenSize = UIScreen.main.bounds.size
-        let frame: CGRect = CGRect(x: 0, y: 2 * buttonPad + buttonHeight, width: screenSize.width, height: screenSize.height - 2 * buttonPad - buttonHeight)
+        let frame: CGRect = CGRect(x: 0, y: 2 * buttonPad + buttonHeight, width: screenWidth, height: screenHeight - 2 * buttonPad - buttonHeight)
         self.scrollView = ImageScrollView(frame: frame)
         self.scrollView.setup()
         self.scrollView.imageContentMode = .aspectFit

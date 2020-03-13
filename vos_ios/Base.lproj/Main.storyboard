@@ -73,26 +73,10 @@
                                     <barButtonItem title="Item" id="RHg-rk-5ys"/>
                                 </items>
                             </toolbar>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i1x-yk-0C3">
-                                <rect key="frame" x="0.0" y="370" width="375" height="253"/>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4JH-rk-1TO" customClass="VideoControllView" customModule="vos_ios" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="371" width="375" height="252"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="epg-3p-aFi" customClass="VideoScrollView" customModule="vos_ios" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="50" width="375" height="70"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vMf-XR-e0b" customClass="VideoScrollView" customModule="vos_ios" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="137" width="375" height="70"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qDp-ng-rUe" customClass="IndicatorLineView" customModule="vos_ios" customModuleProvider="target">
-                                        <rect key="frame" x="175" y="0.0" width="25" height="253"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    </view>
-                                </subviews>
-                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -100,19 +84,10 @@
                     </view>
                     <connections>
                         <outlet property="PlayView" destination="U3Y-a2-EqN" id="zdS-Cn-Ckf"/>
-                        <outlet property="backScrollView" destination="vMf-XR-e0b" id="ch2-Oo-x9m"/>
-                        <outlet property="controlScrollView" destination="i1x-yk-0C3" id="Z4b-cf-vge"/>
-                        <outlet property="foreScrollView" destination="epg-3p-aFi" id="vVs-w8-Pzy"/>
-                        <outlet property="timeIndicatorView" destination="qDp-ng-rUe" id="XJa-SH-BB7"/>
+                        <outlet property="controlView" destination="4JH-rk-1TO" id="NTH-YY-dFO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4rr-Y6-rsF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <view contentMode="scaleToFill" id="e5q-A8-ekB">
-                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                    <viewLayoutGuide key="safeArea" id="G2j-iD-T8V"/>
-                </view>
             </objects>
             <point key="canvasLocation" x="-477.60000000000002" y="160.56971514242881"/>
         </scene>

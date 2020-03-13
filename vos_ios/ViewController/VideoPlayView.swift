@@ -40,7 +40,7 @@ class VideoPlayView: UIView {
     }
     
     func seek(toTime: CMTime) {
-        self.player?.seek(to: toTime, toleranceBefore: CMTime(value: 1, timescale: 15), toleranceAfter: CMTime(value: 1, timescale: 15))
+        self.player?.seek(to: toTime, toleranceBefore: timeTolerance, toleranceAfter: timeTolerance)
     }
     
 }

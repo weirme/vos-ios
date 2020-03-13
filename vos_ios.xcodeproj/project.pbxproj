@@ -16,6 +16,8 @@
 		363DEE2B23FA36370053E756 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 363DEE2923FA36370053E756 /* LaunchScreen.storyboard */; };
 		36C3A01C2418874D0046F344 /* IndicatorLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C3A01B2418874D0046F344 /* IndicatorLineView.swift */; };
 		36C3A01E241A12960046F344 /* VideoPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C3A01D241A12960046F344 /* VideoPlayView.swift */; };
+		36C3A020241A57470046F344 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C3A01F241A57460046F344 /* Config.swift */; };
+		36C3A024241B32B20046F344 /* VideoControllView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C3A023241B32B20046F344 /* VideoControllView.swift */; };
 		36E785072415DBD200D2C745 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E785062415DBD200D2C745 /* EditViewController.swift */; };
 		36E785092415E13400D2C745 /* VideoScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E785082415E13300D2C745 /* VideoScrollView.swift */; };
 		36E7850E2416724900D2C745 /* SlideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7850D2416724800D2C745 /* SlideView.swift */; };
@@ -39,9 +41,12 @@
 		36990FD923FABEC500CDE2AB /* vos_ios-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "vos_ios-Bridging-Header.h"; sourceTree = "<group>"; };
 		36C3A01B2418874D0046F344 /* IndicatorLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorLineView.swift; sourceTree = "<group>"; };
 		36C3A01D241A12960046F344 /* VideoPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayView.swift; sourceTree = "<group>"; };
+		36C3A01F241A57460046F344 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		36C3A023241B32B20046F344 /* VideoControllView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoControllView.swift; sourceTree = "<group>"; };
+		36C3A025241B577B0046F344 /* foreVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = foreVideo.mp4; sourceTree = "<group>"; };
 		36E785062415DBD200D2C745 /* EditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 		36E785082415E13300D2C745 /* VideoScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoScrollView.swift; sourceTree = "<group>"; wrapsLines = 1; };
-		36E7850A2415F5FF00D2C745 /* video.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = video.mp4; sourceTree = "<group>"; };
+		36E7850A2415F5FF00D2C745 /* backVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = backVideo.mp4; sourceTree = "<group>"; };
 		36E7850D2416724800D2C745 /* SlideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideView.swift; sourceTree = "<group>"; };
 		85BB72DA8BDD1E5B6060864B /* Pods-vos_ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vos_ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-vos_ios/Pods-vos_ios.debug.xcconfig"; sourceTree = "<group>"; };
 		C9979904DB85D131CFFF4CA2 /* Pods-vos_ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vos_ios.release.xcconfig"; path = "Pods/Target Support Files/Pods-vos_ios/Pods-vos_ios.release.xcconfig"; sourceTree = "<group>"; };
@@ -92,7 +97,8 @@
 				363DEE2423FA36300053E756 /* Main.storyboard */,
 				363DEE2923FA36370053E756 /* LaunchScreen.storyboard */,
 				363DEE2C23FA36370053E756 /* Info.plist */,
-				36E7850A2415F5FF00D2C745 /* video.mp4 */,
+				36C3A025241B577B0046F344 /* foreVideo.mp4 */,
+				36E7850A2415F5FF00D2C745 /* backVideo.mp4 */,
 			);
 			path = vos_ios;
 			sourceTree = "<group>";
@@ -133,6 +139,8 @@
 				36E7850D2416724800D2C745 /* SlideView.swift */,
 				36C3A01B2418874D0046F344 /* IndicatorLineView.swift */,
 				36C3A01D241A12960046F344 /* VideoPlayView.swift */,
+				36C3A01F241A57460046F344 /* Config.swift */,
+				36C3A023241B32B20046F344 /* VideoControllView.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -250,10 +258,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				36C3A01C2418874D0046F344 /* IndicatorLineView.swift in Sources */,
+				36C3A024241B32B20046F344 /* VideoControllView.swift in Sources */,
 				363DEE1F23FA36300053E756 /* AppDelegate.swift in Sources */,
 				36E785092415E13400D2C745 /* VideoScrollView.swift in Sources */,
 				363DEE2123FA36300053E756 /* SceneDelegate.swift in Sources */,
 				36E785072415DBD200D2C745 /* EditViewController.swift in Sources */,
+				36C3A020241A57470046F344 /* Config.swift in Sources */,
 				36E7850E2416724900D2C745 /* SlideView.swift in Sources */,
 				36C3A01E241A12960046F344 /* VideoPlayView.swift in Sources */,
 			);
