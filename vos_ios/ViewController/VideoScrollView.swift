@@ -2,44 +2,31 @@ import UIKit
 import AVKit
 
 
-protocol VideoScrollDelegate {
-    func videoScrollToTime(videoScrollView: VideoScrollView, pos: Float)
-}
-
-
 class VideoScrollView: UIView, UIScrollViewDelegate {
     
     var scrollView: UIScrollView!
     var slideView: SlideView!
     var selectButton: UIButton!
-    
-    var delegate: VideoScrollDelegate?
-    
+        
     var contentSize: CGSize {
-        get {
-            return self.scrollView.contentSize
-        }
-        set {
-            self.scrollView.contentSize = newValue
-        }
+        get { return self.scrollView.contentSize }
+        set { self.scrollView.contentSize = newValue }
     }
     
     var offset: CGPoint {
-        get {
-            return self.scrollView.contentOffset
-        }
-        set {
-            self.scrollView.setContentOffset(newValue, animated: true)
+        get { return self.scrollView.contentOffset }
+        set { self.scrollView.setContentOffset(newValue, animated: true )
         }
     }
     
     var edgeInsets: UIEdgeInsets {
-        get {
-            return self.scrollView.contentInset
-        }
-        set {
-            self.scrollView.contentInset = newValue
-        }
+        get { return self.scrollView.contentInset }
+        set { self.scrollView.contentInset = newValue }
+    }
+    
+    var isScrollEnabled: Bool {
+        get { return self.scrollView.isScrollEnabled }
+        set { self.scrollView.isScrollEnabled = newValue }
     }
         
     override init(frame: CGRect) {
@@ -53,22 +40,23 @@ class VideoScrollView: UIView, UIScrollViewDelegate {
     }
     
     private func commonInit() {
-        let scrollHeight = self.bounds.height * 0.8
-        let scrollWidth = self.bounds.width * 0.75
-        let scrollX = self.bounds.width * 0.2
+        let scrollHeight = self.bounds.height * K_scrollViewHeight
+        let scrollWidth = scrollViewWidth
+        let scrollX = scrollViewX
         let scrollY = self.bounds.midY - scrollHeight / 2
         let scrollRect = CGRect(x: scrollX, y: scrollY, width: scrollWidth, height: scrollHeight)
         self.scrollView = UIScrollView(frame: scrollRect)
         self.scrollView.contentSize = CGSize(width: scrollWidth, height: scrollHeight)
-        self.scrollView.contentInset = UIEdgeInsets(top: 0, left: scrollWidth, bottom: 0, right: scrollWidth)
-        self.scrollView.contentOffset = CGPoint(x: -screenWidth * 0.3, y: 0)
+        self.scrollView.contentInset = UIEdgeInsets(top: 0, left: scrollWidth / 2, bottom: 0, right: scrollWidth / 2)
+        self.scrollView.contentOffset = CGPoint(x: -scrollViewStandardOffset, y: 0)
         self.scrollView.showsHorizontalScrollIndicator = false
+        self.scrollView.isScrollEnabled = false
         self.scrollView.layer.cornerRadius = 5
         self.scrollView.backgroundColor = #colorLiteral(red: 0.1139808074, green: 0.1214027479, blue: 0.1340248883, alpha: 1)
         self.addSubview(self.scrollView)
         
         let buttonRadius = CGFloat(10.0)
-        self.selectButton = UIButton(frame: CGRect(x: self.bounds.width * 0.1 - buttonRadius, y: self.bounds.midY - buttonRadius, width: buttonRadius * 2, height: buttonRadius * 2))
+        self.selectButton = UIButton(frame: CGRect(x: self.bounds.width * K_scrollViewX / 2 - buttonRadius, y: self.bounds.midY - buttonRadius, width: buttonRadius * 2, height: buttonRadius * 2))
         self.selectButton.setImage(UIImage(systemName: "circle"), for: .normal)
         self.addSubview(self.selectButton)
         
@@ -79,7 +67,7 @@ class VideoScrollView: UIView, UIScrollViewDelegate {
         let duration = video.duration
         let track = video.tracks.first!
         let resolution = track.naturalSize.applying(track.preferredTransform)
-        var contentWidth = self.scrollView.bounds.width * 0.7
+        var contentWidth = scrollViewContentWidth
         var imgHeight = CGFloat(0)
         var imgWidth = CGFloat(0)
         var nImgDisplay = 0
@@ -119,12 +107,6 @@ class VideoScrollView: UIView, UIScrollViewDelegate {
         self.slideView = SlideView(frame: CGRect(x: 0, y: 0, width: self.contentSize.width, height: self.contentSize.height))
         self.scrollView.addSubview(self.slideView)
         self.scrollView.bringSubviewToFront(self.slideView)
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let trans: CGPoint = scrollView.contentOffset
-        let pos = (self.frame.midX - scrollView.frame.origin.x + trans.x) / scrollView.frame.width
-//        self.delegate?.videoScrollToTime(videoScrollView: self, pos: Float(pos))
     }
     
 }
