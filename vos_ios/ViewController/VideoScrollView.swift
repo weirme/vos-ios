@@ -6,7 +6,7 @@ class VideoScrollView: UIView, UIScrollViewDelegate {
     
     var scrollView: UIScrollView!
     var slideView: SlideView!
-    var selectButton: UIButton!
+    var selectedFlagView: UIImageView!
         
     var contentSize: CGSize {
         get { return self.scrollView.contentSize }
@@ -15,8 +15,7 @@ class VideoScrollView: UIView, UIScrollViewDelegate {
     
     var offset: CGPoint {
         get { return self.scrollView.contentOffset }
-        set { self.scrollView.setContentOffset(newValue, animated: true )
-        }
+        set { self.scrollView.setContentOffset(newValue, animated: true) }
     }
     
     var edgeInsets: UIEdgeInsets {
@@ -24,9 +23,29 @@ class VideoScrollView: UIView, UIScrollViewDelegate {
         set { self.scrollView.contentInset = newValue }
     }
     
-    var isScrollEnabled: Bool {
-        get { return self.scrollView.isScrollEnabled }
-        set { self.scrollView.isScrollEnabled = newValue }
+    var isSelected: Bool = false {
+        willSet {
+            self.scrollView.isScrollEnabled = newValue
+            let name = newValue ? "circle.fill" : "circle"
+            let config = UIImage.SymbolConfiguration(weight: .bold)
+            self.selectedFlagView.image = UIImage(systemName: name, withConfiguration: config)
+        }
+    }
+        
+    var clipStart: CGFloat {
+        return self.slideView.start + scrollViewX - self.scrollView.contentOffset.x
+    }
+    
+    var clipEnd: CGFloat {
+        return self.slideView.end + scrollViewX - self.scrollView.contentOffset.x
+    }
+    
+    var clipStartPos: CGFloat {
+        return self.slideView.start / self.scrollView.contentSize.width
+    }
+    
+    var clipEndPos: CGFloat {
+        return self.slideView.end / self.scrollView.contentSize.width
     }
         
     override init(frame: CGRect) {
@@ -48,7 +67,7 @@ class VideoScrollView: UIView, UIScrollViewDelegate {
         self.scrollView = UIScrollView(frame: scrollRect)
         self.scrollView.contentSize = CGSize(width: scrollWidth, height: scrollHeight)
         self.scrollView.contentInset = UIEdgeInsets(top: 0, left: scrollWidth / 2, bottom: 0, right: scrollWidth / 2)
-        self.scrollView.contentOffset = CGPoint(x: -scrollViewStandardOffset, y: 0)
+        self.scrollView.contentOffset = CGPoint(x: scrollViewStandardOffset, y: 0)
         self.scrollView.showsHorizontalScrollIndicator = false
         self.scrollView.isScrollEnabled = false
         self.scrollView.layer.cornerRadius = 5
@@ -56,9 +75,10 @@ class VideoScrollView: UIView, UIScrollViewDelegate {
         self.addSubview(self.scrollView)
         
         let buttonRadius = CGFloat(10.0)
-        self.selectButton = UIButton(frame: CGRect(x: self.bounds.width * K_scrollViewX / 2 - buttonRadius, y: self.bounds.midY - buttonRadius, width: buttonRadius * 2, height: buttonRadius * 2))
-        self.selectButton.setImage(UIImage(systemName: "circle"), for: .normal)
-        self.addSubview(self.selectButton)
+        self.selectedFlagView = UIImageView(frame: CGRect(x: self.bounds.width * K_scrollViewX / 2 - buttonRadius, y: self.bounds.midY - buttonRadius, width: buttonRadius * 2, height: buttonRadius * 2))
+        let config = UIImage.SymbolConfiguration(weight: .bold)
+        self.selectedFlagView.image = UIImage(systemName: "circle", withConfiguration: config)
+        self.addSubview(self.selectedFlagView)
         
         self.backgroundColor = #colorLiteral(red: 0.16138798, green: 0.164371103, blue: 0.1895281374, alpha: 1)
     }

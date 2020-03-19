@@ -66,25 +66,37 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                             </view>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="N6S-4E-beE">
-                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <items>
-                                    <barButtonItem title="Item" id="RHg-rk-5ys"/>
-                                </items>
-                            </toolbar>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4JH-rk-1TO" customClass="VideoControllView" customModule="vos_ios" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="371" width="375" height="252"/>
+                                <rect key="frame" x="0.0" y="415" width="375" height="252"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                             </view>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="N6S-4E-beE">
+                                <rect key="frame" x="0.0" y="371" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <items>
+                                    <barButtonItem systemItem="play" id="RHg-rk-5ys">
+                                        <connections>
+                                            <action selector="clickPlayButton:" destination="dKz-Nd-VKe" id="lvE-mk-qHJ"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem systemItem="pause" id="dZh-pu-ftv">
+                                        <inset key="imageInsets" minX="20" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <connections>
+                                            <action selector="clickPauseButton:" destination="dKz-Nd-VKe" id="5Jv-hY-3Dw"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="cn9-MT-haI"/>
                     </view>
                     <connections>
-                        <outlet property="PlayView" destination="U3Y-a2-EqN" id="zdS-Cn-Ckf"/>
                         <outlet property="controlView" destination="4JH-rk-1TO" id="NTH-YY-dFO"/>
+                        <outlet property="pauseButton" destination="dZh-pu-ftv" id="Wk8-ot-LnL"/>
+                        <outlet property="playButton" destination="RHg-rk-5ys" id="qv6-hv-AuJ"/>
+                        <outlet property="playView" destination="U3Y-a2-EqN" id="zdS-Cn-Ckf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4rr-Y6-rsF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

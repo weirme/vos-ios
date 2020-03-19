@@ -3,11 +3,17 @@ import AVKit
 
 
 protocol VideoControlDelegate {
-    func videoSeekToTime(pos: Float)
+    func videoScrollToTime(pos: Float, forVideo: WhichVideo)
 }
 
 
-class VideoControllView: UIView, UIScrollViewDelegate {
+fileprivate enum ScrollIndicatorPosState {
+    case out
+    case `in`
+}
+
+
+class VideoControllView: UIView, UIScrollViewDelegate, SlideViewProtocol {
     
     var foreScrollView: VideoScrollView!
     var backScrollView: VideoScrollView!
@@ -15,6 +21,42 @@ class VideoControllView: UIView, UIScrollViewDelegate {
     private var panGestureScrollAll: UIPanGestureRecognizer!
     
     var delegate: VideoControlDelegate?
+    
+    var indicatorMidX: CGFloat {
+        return self.timeIndicatorView.frame.midX
+    }
+    
+    private var foreIndicatorPosState: ScrollIndicatorPosState = .out {
+        willSet {
+            let state: Bool = (newValue == .out)
+            let name = Notification.Name("ForeIndicatorAlignedNotification")
+            NotificationCenter.default.post(name: name, object: nil, userInfo: ["state": state])
+        }
+    }
+    
+    var foreClipStartPos: Float {
+        return Float(self.foreScrollView.clipStartPos)
+    }
+    
+    var foreClipEndPos: Float {
+        return Float(self.foreScrollView.clipEndPos)
+    }
+    
+    var backClipStartPos: Float {
+        return Float(self.backScrollView.clipStartPos)
+    }
+    
+    var backClipEndPos: Float {
+        return Float(self.backScrollView.clipEndPos)
+    }
+    
+    var foreReadyToPlay: Bool {
+        return self.foreScrollView.clipStart <= self.indicatorMidX
+    }
+    
+    var backReadyToPlay: Bool {
+        return self.backScrollView.clipStart <= self.indicatorMidX
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -45,8 +87,6 @@ class VideoControllView: UIView, UIScrollViewDelegate {
         self.addSubview(self.backScrollView)
 
         self.timeIndicatorView = IndicatorLineView(frame: CGRect(x: self.bounds.width * K_indicatorViewMidX - indicatorRadius, y: self.bounds.height * K_indicatorViewY, width: 2 * indicatorRadius, height: self.bounds.height * K_indicatorViewHeight))
-        let panGestureMoveIndicator = UIPanGestureRecognizer(target: self, action: #selector(self.panActionMoveIndicator(pan:)))
-        self.timeIndicatorView.addGestureRecognizer(panGestureMoveIndicator)
         self.addSubview(self.timeIndicatorView)
                 
         self.panGestureScrollAll = UIPanGestureRecognizer(target: self, action: #selector(self.panActionScrollAll(pan:)))
@@ -59,21 +99,21 @@ class VideoControllView: UIView, UIScrollViewDelegate {
         self.foreScrollView.displayVideo(video: foreVideo, durationRatio: ratio)
         self.backScrollView.displayVideo(video: backVideo, durationRatio: 1 / ratio)
         
+        self.foreScrollView.slideView.delegate = self
+        self.backScrollView.slideView.delegate = self
+        
         self.foreScrollView.edgeInsets = UIEdgeInsets(top: 0, left: self.backScrollView.contentSize.width / 2, bottom: 0, right: self.backScrollView.contentSize.width / 2)
-        self.backScrollView.edgeInsets = UIEdgeInsets(top: 0, left: self.foreScrollView.contentSize.width / 2, bottom: 0, right: self.foreScrollView.contentSize.width / 2)
+        self.backScrollView.edgeInsets = UIEdgeInsets(top: 0, left: self.foreScrollView.contentSize.width, bottom: 0, right: self.foreScrollView.contentSize.width)
     }
     
     @objc func tapAction(tap: UITapGestureRecognizer) {
         let view = tap.view as! VideoScrollView
         let anotherView = (view == self.foreScrollView ? self.backScrollView : self.foreScrollView)!
-        view.isScrollEnabled = !view.isScrollEnabled
-        if view.isScrollEnabled {
-            anotherView.isScrollEnabled = false
-            let deltaOffsetX: CGFloat = view.offset.x + scrollViewStandardOffset
-            view.offset = CGPoint(x: -scrollViewStandardOffset, y: 0)
-            anotherView.offset = CGPoint(x: anotherView.offset.x - deltaOffsetX, y: 0)
+        view.isSelected = !view.isSelected
+        if view.isSelected {
+            anotherView.isSelected = false
         }
-        self.panGestureScrollAll.isEnabled = !self.foreScrollView.isScrollEnabled && !self.backScrollView.isScrollEnabled
+        self.panGestureScrollAll.isEnabled = !self.foreScrollView.isSelected && !self.backScrollView.isSelected
     }
     
     @objc func panActionScrollAll(pan: UIPanGestureRecognizer) {
@@ -85,30 +125,53 @@ class VideoControllView: UIView, UIScrollViewDelegate {
         
         var deltaOffsetX: CGFloat = 0
         if trans.x < 0 {
-            deltaOffsetX = -max(trans.x, rightX + screenWidth * K_scrollViewWidth)
+            deltaOffsetX = -max(trans.x, rightX + scrollViewWidth + scrollViewStandardOffset)
         } else {
-            deltaOffsetX = -min(trans.x, leftX)
+            deltaOffsetX = -min(trans.x, leftX - scrollViewStandardOffset)
         }
         self.foreScrollView.offset = CGPoint(x: foreOffset.x + deltaOffsetX, y: foreOffset.y)
         self.backScrollView.offset = CGPoint(x: backOffset.x + deltaOffsetX, y: backOffset.y)
     }
     
-    @objc func panActionMoveIndicator(pan: UIPanGestureRecognizer) {
-        let view = pan.view!
-        let trans: CGPoint = pan.translation(in: view)
-        let curX = view.frame.midX
-        if curX + trans.x >= scrollViewX && curX + trans.x <= scrollViewX + scrollViewWidth {
-            view.frame = view.frame.offsetBy(dx: trans.x, dy: 0)
+    private func updateForeIndicatorPosState() {
+        if self.foreIndicatorPosState == .out && self.foreScrollView.clipStart < self.indicatorMidX && self.indicatorMidX < self.foreScrollView.clipEnd {
+            self.foreIndicatorPosState = .in
+        } else if self.foreIndicatorPosState == .in && (self.foreScrollView.clipStart > self.indicatorMidX || self.indicatorMidX > self.foreScrollView.clipEnd) {
+            self.foreIndicatorPosState = .out
         }
-        let pos = (self.timeIndicatorView.frame.midX -  self.foreScrollView.scrollView.frame.origin.x + trans.x) / self.foreScrollView.contentSize.width
-        self.delegate?.videoSeekToTime(pos: Float(pos))
-        pan.setTranslation(CGPoint.zero, in: view)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let trans: CGPoint = self.foreScrollView.offset
-        let pos = (self.timeIndicatorView.frame.midX -  self.foreScrollView.scrollView.frame.origin.x + trans.x) / self.foreScrollView.contentSize.width
-        self.delegate?.videoSeekToTime(pos: Float(pos))
+        let trans: CGPoint = scrollView.contentOffset
+        let pos = (self.indicatorMidX - scrollViewX + trans.x) / scrollView.contentSize.width
+        let view = scrollView.superview as! VideoScrollView
+        let forVideo: WhichVideo = view == self.foreScrollView ? .fore : .back
+        self.delegate?.videoScrollToTime(pos: Float(pos), forVideo: forVideo)
+        if forVideo == .fore {
+            self.updateForeIndicatorPosState()
+        }
+    }
+    
+    func didSlide() {
+        self.updateForeIndicatorPosState()
+    }
+    
+    func scrollToPos(pos: Float, forVideo: WhichVideo) {
+        let videoScrollView: VideoScrollView = forVideo == .fore ? self.foreScrollView : self.backScrollView
+        let offsetX: CGFloat = CGFloat(pos) * videoScrollView.contentSize.width - (self.indicatorMidX - scrollViewX)
+        let dx = offsetX - videoScrollView.offset.x
+        self.foreScrollView.scrollView.setContentOffset(CGPoint(x: self.foreScrollView.offset.x + dx, y: self.foreScrollView.offset.y), animated: false)
+        self.backScrollView.scrollView.setContentOffset(CGPoint(x: self.backScrollView.offset.x + dx, y: self.backScrollView.offset.y), animated: false)
+    }
+    
+    func resetScrollViewOffset() {
+        let dx = self.backScrollView.clipStart - self.indicatorMidX
+        let foreOffset = self.foreScrollView.offset
+        let backOffset = self.backScrollView.offset
+        if dx > 0 {
+            self.foreScrollView.offset = CGPoint(x: foreOffset.x + dx, y: foreOffset.y)
+            self.backScrollView.offset = CGPoint(x: backOffset.x + dx, y: backOffset.y)
+        }
     }
     
 }

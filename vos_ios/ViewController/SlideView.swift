@@ -1,6 +1,10 @@
 import UIKit
 
 
+protocol SlideViewProtocol {
+    func didSlide()
+}
+
 class SlideView: UIView {
     
     var startView: UIImageView!
@@ -10,6 +14,15 @@ class SlideView: UIView {
     var leftShadowView: UIView!
     var rightShadowView: UIView!
     
+    var delegate: SlideViewProtocol?
+    
+    var start: CGFloat {
+        return self.startView.frame.minX
+    }
+    
+    var end: CGFloat {
+        return self.endView.frame.maxX
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -94,6 +107,7 @@ class SlideView: UIView {
         self.topLineView.frame = CGRect(x: self.startView.frame.origin.x, y: 0, width: self.endView.frame.maxX - self.startView.frame.minX, height: slideLineHeight)
         self.bottomLineView.frame = CGRect(x: self.startView.frame.origin.x, y: superview.frame.height - slideLineHeight, width: self.endView.frame.maxX - self.startView.frame.minX, height: slideLineHeight)
         
+        self.delegate?.didSlide()
         pan.setTranslation(CGPoint.zero, in: view)
     }
 }
