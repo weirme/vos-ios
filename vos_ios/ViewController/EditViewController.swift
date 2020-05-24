@@ -23,8 +23,11 @@ class EditViewController: UIViewController, VideoPlayDelegate, VideoControlDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let foreVideoNoAlphaURL = URL(fileURLWithPath: "/Users/sameal/Documents/PROJECT/vos_ios/vos_ios/swan.mp4")
         let foreVideoURL = URL(fileURLWithPath: "/Users/sameal/Documents/PROJECT/vos_ios/vos_ios/foreVideo.mp4")
         let backVideoURL = URL(fileURLWithPath: "/Users/sameal/Documents/PROJECT/vos_ios/vos_ios/backVideo.mp4")
+        
+        convertToHEVCAlpha(sourceURL: foreVideoNoAlphaURL, destinationURL: foreVideoURL)
         
         self.foreVideoAsset = AVAsset(url: foreVideoURL)
         self.backVideoAsset = AVAsset(url: backVideoURL)

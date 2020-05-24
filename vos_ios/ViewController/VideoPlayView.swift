@@ -67,7 +67,6 @@ class VideoPlayView: UIView {
         }
         
         self.forePlayerLayer?.frame = makeFrame(video: self.foreVideoAsset!)
-        self.forePlayerLayer?.opacity = 0.5
         self.forePlayerLayer?.isHidden = true
         self.backPlayerLayer?.frame = makeFrame(video: self.backVideoAsset!)
         self.layer.insertSublayer(self.forePlayerLayer!, at: 1)
