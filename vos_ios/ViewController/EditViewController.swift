@@ -13,6 +13,7 @@ class EditViewController: UIViewController, VideoPlayDelegate, VideoControlDeleg
     
     @IBOutlet weak var playView: VideoPlayView!
     @IBOutlet weak var controlView: VideoControllView!
+    @IBOutlet weak var exportButton: UIBarButtonItem!
     @IBOutlet weak var playButton: UIBarButtonItem!
     @IBOutlet weak var pauseButton: UIBarButtonItem!
     
@@ -27,7 +28,7 @@ class EditViewController: UIViewController, VideoPlayDelegate, VideoControlDeleg
         let foreVideoURL = URL(fileURLWithPath: "/Users/sameal/Documents/PROJECT/vos_ios/vos_ios/foreVideo.mp4")
         let backVideoURL = URL(fileURLWithPath: "/Users/sameal/Documents/PROJECT/vos_ios/vos_ios/backVideo.mp4")
         
-        convertToHEVCAlpha(sourceURL: foreVideoNoAlphaURL, destinationURL: foreVideoURL)
+//        convertToHEVCAlpha(sourceURL: foreVideoNoAlphaURL, destinationURL: foreVideoURL)
         
         self.foreVideoAsset = AVAsset(url: foreVideoURL)
         self.backVideoAsset = AVAsset(url: backVideoURL)
@@ -102,6 +103,16 @@ class EditViewController: UIViewController, VideoPlayDelegate, VideoControlDeleg
         }
     }
     
+    @IBAction func export(_ sender: Any) {
+        print("Exporting start...")
+        self.exportButton.isEnabled = false
+        let compositor = VideoCompositor(frontAsset: self.foreVideoAsset, backAsset: self.backVideoAsset)
+        compositor.frontInsertTime = CMTime(value: 1, timescale: 2)
+        compositor.backInsertTime = .zero
+        compositor.frontTimeRange = CMTimeRange(start: .zero, duration: CMTime(value: 3, timescale: 2))
+        compositor.backTimeRange = CMTimeRange(start: CMTime(value: 6, timescale: 1), duration: CMTime(value: 2, timescale: 1))
+        compositor.makeVideo()
+    }
     
     @objc private func foreIndicatorAlignedNotificationObserved() {
         if self.playView.status == .playing {

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0592DBE1A1E4C4A3948130AB /* libPods-vos_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB27019FB13F5D80AFD24517 /* libPods-vos_ios.a */; };
+		3607E8962482991900239F93 /* VideoCompositor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3607E8952482991900239F93 /* VideoCompositor.swift */; };
 		361342F623FD1F6800418F38 /* dextr.pt in Resources */ = {isa = PBXBuildFile; fileRef = 361342F523FD1F6800418F38 /* dextr.pt */; };
 		363DEE1F23FA36300053E756 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363DEE1E23FA36300053E756 /* AppDelegate.swift */; };
 		363DEE2123FA36300053E756 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363DEE2023FA36300053E756 /* SceneDelegate.swift */; };
@@ -26,6 +27,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3607E8942482743400239F93 /* vos_ios-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "vos_ios-Bridging-Header.h"; sourceTree = "<group>"; };
+		3607E8952482991900239F93 /* VideoCompositor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCompositor.swift; sourceTree = "<group>"; };
 		361342F523FD1F6800418F38 /* dextr.pt */ = {isa = PBXFileReference; lastKnownFileType = file; path = dextr.pt; sourceTree = "<group>"; };
 		363DEE1B23FA36300053E756 /* vos_ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vos_ios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		363DEE1E23FA36300053E756 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -42,7 +45,6 @@
 		3676C62023FC2FA100F06008 /* CVHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CVHelper.mm; sourceTree = "<group>"; };
 		3676C62323FC2FF900F06008 /* DEXTR.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DEXTR.mm; sourceTree = "<group>"; };
 		3676C62523FC301700F06008 /* DEXTR.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DEXTR.h; sourceTree = "<group>"; };
-		36990FD923FABEC500CDE2AB /* vos_ios-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "vos_ios-Bridging-Header.h"; sourceTree = "<group>"; };
 		36C3A01B2418874D0046F344 /* IndicatorLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorLineView.swift; sourceTree = "<group>"; };
 		36C3A01D241A12960046F344 /* VideoPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayView.swift; sourceTree = "<group>"; };
 		36C3A01F241A57460046F344 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
@@ -96,7 +98,7 @@
 				365E202C2471842500FFFC7D /* utils */,
 				363DEE1E23FA36300053E756 /* AppDelegate.swift */,
 				363DEE2023FA36300053E756 /* SceneDelegate.swift */,
-				36990FD923FABEC500CDE2AB /* vos_ios-Bridging-Header.h */,
+				3607E8942482743400239F93 /* vos_ios-Bridging-Header.h */,
 				363DEE2723FA36370053E756 /* Assets.xcassets */,
 				363DEE2423FA36300053E756 /* Main.storyboard */,
 				363DEE2923FA36370053E756 /* LaunchScreen.storyboard */,
@@ -110,6 +112,7 @@
 		365E202C2471842500FFFC7D /* utils */ = {
 			isa = PBXGroup;
 			children = (
+				3607E8952482991900239F93 /* VideoCompositor.swift */,
 				365E202D2471846800FFFC7D /* HEVCAlpha.swift */,
 			);
 			path = utils;
@@ -291,6 +294,7 @@
 			files = (
 				36C3A01C2418874D0046F344 /* IndicatorLineView.swift in Sources */,
 				36C3A024241B32B20046F344 /* VideoControllView.swift in Sources */,
+				3607E8962482991900239F93 /* VideoCompositor.swift in Sources */,
 				363DEE1F23FA36300053E756 /* AppDelegate.swift in Sources */,
 				363DEE2123FA36300053E756 /* SceneDelegate.swift in Sources */,
 				365E202E2471846800FFFC7D /* HEVCAlpha.swift in Sources */,

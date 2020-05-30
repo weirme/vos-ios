@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="dKz-Nd-VKe">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="dKz-Nd-VKe">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -57,7 +57,11 @@
                                 <items>
                                     <navigationItem title="Title" id="Ops-mn-I3m">
                                         <barButtonItem key="leftBarButtonItem" title="Back" id="grL-pX-Kod"/>
-                                        <barButtonItem key="rightBarButtonItem" title="OK" id="ff2-iy-6y7"/>
+                                        <barButtonItem key="rightBarButtonItem" title="OK" id="ff2-iy-6y7">
+                                            <connections>
+                                                <action selector="export:" destination="dKz-Nd-VKe" id="O7m-UX-46g"/>
+                                            </connections>
+                                        </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -94,6 +98,7 @@
                     </view>
                     <connections>
                         <outlet property="controlView" destination="4JH-rk-1TO" id="NTH-YY-dFO"/>
+                        <outlet property="exportButton" destination="ff2-iy-6y7" id="egO-le-vuk"/>
                         <outlet property="pauseButton" destination="dZh-pu-ftv" id="Wk8-ot-LnL"/>
                         <outlet property="playButton" destination="RHg-rk-5ys" id="qv6-hv-AuJ"/>
                         <outlet property="playView" destination="U3Y-a2-EqN" id="zdS-Cn-Ckf"/>
@@ -105,6 +110,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="arrow.up.right.video.fill" catalog="system" width="64" height="40"/>
+        <image name="arrow.up.right.video.fill" catalog="system" width="128" height="82"/>
     </resources>
 </document>
