@@ -1,6 +1,7 @@
 import Foundation
 import AVFoundation
 import UIKit
+import Photos
 
 
 class VideoCompositor {
@@ -20,25 +21,33 @@ class VideoCompositor {
         self.outputURL = VideoCompositor.getOutputURL()!
     }
     
-    func makeVideo() {
+    func makeVideo(completionHandler: @escaping () -> ()) {
         let composition = AVMutableComposition()
+        
+        // Tracks
         self.addAsset(asset: self.frontAsset, toComposition: composition, trackID: 1, atTime: self.frontInsertTime, timeRange: self.frontTimeRange)
         self.addAsset(asset: self.backAsset, toComposition: composition, trackID: 2, atTime: self.backInsertTime, timeRange: self.backTimeRange)
         
+        // Layer Instruction
+        let frontLayerInstruction = AVMutableVideoCompositionLayerInstruction()
+        frontLayerInstruction.trackID = 1
+        frontLayerInstruction.setOpacity(0, at: self.frontInsertTime + self.frontTimeRange.duration)
+        let backLayerInstruction = AVMutableVideoCompositionLayerInstruction()
+        backLayerInstruction.trackID = 2
+        
+        // Instruction
+        let instruction = AVMutableVideoCompositionInstruction()
+        instruction.timeRange = CMTimeRange(start: .zero, duration: self.backAsset.duration)
+        instruction.layerInstructions = [frontLayerInstruction, backLayerInstruction]
+        
+        // Composition
         let backVideoTrack = self.backAsset.tracks.first!
         let videoComposition = AVMutableVideoComposition()
         videoComposition.renderSize = backVideoTrack.naturalSize
         videoComposition.frameDuration = CMTime(seconds: 1.0 / Double(backVideoTrack.nominalFrameRate), preferredTimescale: backVideoTrack.naturalTimeScale)
-        
-        let instruction = AVMutableVideoCompositionInstruction()
-        instruction.timeRange = composition.tracks.first!.timeRange
-        let frontLayerInstruction = AVMutableVideoCompositionLayerInstruction()
-        frontLayerInstruction.trackID = 1
-        let backLayerInstruction = AVMutableVideoCompositionLayerInstruction()
-        backLayerInstruction.trackID = 2
-        instruction.layerInstructions = [frontLayerInstruction, backLayerInstruction]
         videoComposition.instructions = [instruction]
         
+        // Exporter
         let exporter = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHEVCHighestQualityWithAlpha)
         exporter?.outputURL = self.outputURL
         exporter?.outputFileType = .mov
@@ -48,11 +57,23 @@ class VideoCompositor {
             try FileManager.default.removeItem(at: (exporter?.outputURL)!)
         } catch {}
         exporter?.exportAsynchronously {
-            if exporter?.status == .failed {
-                print(exporter?.description)
-                print(exporter.debugDescription)
-            } else {
-                print("Done! URL=\(exporter?.outputURL)")
+            DispatchQueue.main.async {
+                if exporter?.status == .failed {
+                    print(exporter?.description as Any)
+                    print(exporter.debugDescription)
+                } else {
+                    print("Done! URL=\(String(describing: exporter?.outputURL))")
+                    PHPhotoLibrary.shared().performChanges({
+                        PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: self.outputURL!)
+                    }) { (success, error) in
+                        if success {
+                            print("Successfully saved.")
+                        } else {
+                            print(error?.localizedDescription as Any)
+                        }
+                    }
+                    completionHandler()
+                }
             }
         }
     }
@@ -63,7 +84,9 @@ class VideoCompositor {
             if let assetVideoTrack = asset.tracks.first {
                 try videoTrack?.insertTimeRange(timeRange, of: assetVideoTrack, at: atTime)
             }
-        } catch {}
+        } catch {
+            print("An error occured.")
+        }
     }
     
     static func getOutputURL() -> URL? {
@@ -73,17 +96,6 @@ class VideoCompositor {
             url = url?.appendingPathComponent("export.mov")
         } catch {}
         return url
-    }
-    
-    static func maskLayerWithFrame(frame: CGRect) -> CALayer {
-        let path = UIBezierPath(ovalIn: frame.insetBy(dx: frame.width / 10, dy: frame.height / 10))
-        let layer = CAShapeLayer()
-        layer.frame = frame
-        layer.path = path.cgPath
-        layer.backgroundColor = UIColor.clear.cgColor
-        layer.strokeColor = nil
-        layer.fillColor = UIColor.white.cgColor
-        return layer
     }
     
 }

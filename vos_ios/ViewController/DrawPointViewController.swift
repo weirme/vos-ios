@@ -85,6 +85,8 @@ class DrawPointViewController: UIViewController, NVActivityIndicatorViewable {
             self.scrollView.display(image: self.image)
             self.scrollView.zoomView?.addGestureRecognizer(self.tapGesture)
             self.isOverlay = false
+            self.okButton.setTitle("OK", for: .normal)
+            self.okButton.isHidden = true
         } else {
             if self.coords.count == 0 {
                 self.dismiss(animated: true, completion: nil)
@@ -99,20 +101,32 @@ class DrawPointViewController: UIViewController, NVActivityIndicatorViewable {
     }
     
     @objc func okAction(sender: UIButton) {
-        startAnimating(CGSize(width: 80, height: 80), message: "Processing...", type: NVActivityIndicatorType.pacman, color: #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1), backgroundColor: UIColor(displayP3Red: 128, green: 128, blue: 128, alpha: 0.3), textColor: #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1))
-        
-        DispatchQueue.global().async {
-            let overlayImg: UIImage! = CVHelper.makeOverlayMask(image: self.image, coords: self.coords)
-            DispatchQueue.main.async {
-                self.stopAnimating()
-                self.okButton.isHidden = true
-                self.coords.removeAll()
-                for xmark in self.xmarks {
-                    xmark.removeFromSuperview()
+        if !self.isOverlay {
+            startAnimating(CGSize(width: 80, height: 80), message: "Processing...", type: NVActivityIndicatorType.pacman, color: #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1), backgroundColor: UIColor(displayP3Red: 128, green: 128, blue: 128, alpha: 0.3), textColor: #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1))
+            
+            DispatchQueue.global().async {
+                let overlayImg: UIImage! = CVHelper.makeOverlayMask(image: self.image, coords: self.coords)
+                DispatchQueue.main.async {
+                    self.stopAnimating()
+                    self.okButton.isHidden = true
+                    self.coords.removeAll()
+                    for xmark in self.xmarks {
+                        xmark.removeFromSuperview()
+                    }
+                    self.xmarks.removeAll()
+                    self.scrollView.display(image: overlayImg)
+                    self.isOverlay = true
+                    self.okButton.setTitle("Submit", for: .normal)
+                    self.okButton.isHidden = false
                 }
-                self.xmarks.removeAll()
-                self.scrollView.display(image: overlayImg)
-                self.isOverlay = true
+            }
+        }
+        else {
+            self.dismiss(animated: true) {
+                let stroyboard = UIStoryboard(name: "Main", bundle: nil)
+                guard let next = stroyboard.instantiateViewController(identifier: "editViewController") as? EditViewController else { return }
+                let topController = UIApplication.shared.windows[0].rootViewController as? UINavigationController
+                topController?.pushViewController(next, animated: true)
             }
         }
     }

@@ -4,7 +4,7 @@ import AVKit
 let screenWidth: CGFloat = UIScreen.main.bounds.size.width
 let screenHeight: CGFloat = UIScreen.main.bounds.size.height
 
-let buttonWidth: CGFloat = 50.0
+let buttonWidth: CGFloat = 80.0
 let buttonHeight: CGFloat = 30.0
 let buttonPad: CGFloat = 10.0
 

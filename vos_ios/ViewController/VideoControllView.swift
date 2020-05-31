@@ -50,6 +50,10 @@ class VideoControllView: UIView, UIScrollViewDelegate, SlideViewProtocol {
         return Float(self.backScrollView.clipEndPos)
     }
     
+    var foreClipStartPosRelateToBack: Float {
+        return Float((self.foreScrollView.clipStart - self.backScrollView.clipStart) / (self.backScrollView.clipEnd - self.backScrollView.clipStart))
+    }
+    
     var foreReadyToPlay: Bool {
         return self.foreScrollView.clipStart <= self.indicatorMidX
     }

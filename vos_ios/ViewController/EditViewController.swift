@@ -1,6 +1,8 @@
 import UIKit
 import AVKit
 import ImageScrollView
+import NVActivityIndicatorView
+
 
 
 enum WhichVideo {
@@ -8,7 +10,13 @@ enum WhichVideo {
     case back
 }
 
-class EditViewController: UIViewController, VideoPlayDelegate, VideoControlDelegate {
+func posToTime(pos: Float, duration: CMTime) -> CMTime {
+    let time = CMTime(value: CMTimeValue(pos * Float(duration.value)), timescale: duration.timescale)
+    return time
+}
+
+
+class EditViewController: UIViewController, NVActivityIndicatorViewable, VideoPlayDelegate, VideoControlDelegate {
     
     
     @IBOutlet weak var playView: VideoPlayView!
@@ -103,15 +111,28 @@ class EditViewController: UIViewController, VideoPlayDelegate, VideoControlDeleg
         }
     }
     
+    @IBAction func back(_ sender: Any) {
+        self.navigationController?.popToRootViewController(animated: true)
+    }
+    
+    
     @IBAction func export(_ sender: Any) {
         print("Exporting start...")
         self.exportButton.isEnabled = false
         let compositor = VideoCompositor(frontAsset: self.foreVideoAsset, backAsset: self.backVideoAsset)
-        compositor.frontInsertTime = CMTime(value: 1, timescale: 2)
+        compositor.frontTimeRange = CMTimeRange(start: posToTime(pos: self.controlView.foreClipStartPos, duration: self.foreVideoAsset.duration), end: posToTime(pos: self.controlView.foreClipEndPos, duration: self.foreVideoAsset.duration))
+        compositor.backTimeRange = CMTimeRange(start: posToTime(pos: self.controlView.backClipStartPos, duration: self.backVideoAsset.duration), end: posToTime(pos: self.controlView.backClipEndPos, duration: self.backVideoAsset.duration))
+        compositor.frontInsertTime = posToTime(pos: self.controlView.foreClipStartPosRelateToBack, duration: compositor.backTimeRange.duration)
         compositor.backInsertTime = .zero
-        compositor.frontTimeRange = CMTimeRange(start: .zero, duration: CMTime(value: 3, timescale: 2))
-        compositor.backTimeRange = CMTimeRange(start: CMTime(value: 6, timescale: 1), duration: CMTime(value: 2, timescale: 1))
-        compositor.makeVideo()
+        startAnimating(CGSize(width: 80, height: 80), message: "Exporting...", type: NVActivityIndicatorType.pacman, color: #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1), backgroundColor: UIColor(displayP3Red: 128, green: 128, blue: 128, alpha: 0.3), textColor: #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1))
+        compositor.makeVideo {
+            self.stopAnimating()
+            let alert = UIAlertController(title: "Finished", message: "Video exported successfully.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                self.navigationController?.popToRootViewController(animated: true)
+            }))
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     @objc private func foreIndicatorAlignedNotificationObserved() {
