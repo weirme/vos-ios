@@ -4,7 +4,7 @@
 
 @interface CVHelper : NSObject
 
-+ (UIImage*)makeOverlayMaskOfImage: (UIImage*)image withExtremePoints: (NSArray<NSArray*>*)coords
++ (NSArray<UIImage*>*)makeOverlayMaskOfImage: (UIImage*)image withExtremePoints: (NSArray<NSArray*>*)coords
     NS_SWIFT_NAME(makeOverlayMask(image:coords:));
 
 @end

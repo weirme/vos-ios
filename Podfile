@@ -5,4 +5,5 @@ target 'vos_ios' do
     pod 'OpenCV'
     pod 'NVActivityIndicatorView'
     pod 'ImageScrollView'
+    pod 'Alamofire', '~> 4.9.1'
 end

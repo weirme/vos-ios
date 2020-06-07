@@ -57,23 +57,21 @@ class VideoCompositor {
             try FileManager.default.removeItem(at: (exporter?.outputURL)!)
         } catch {}
         exporter?.exportAsynchronously {
-            DispatchQueue.main.async {
-                if exporter?.status == .failed {
-                    print(exporter?.description as Any)
-                    print(exporter.debugDescription)
-                } else {
-                    print("Done! URL=\(String(describing: exporter?.outputURL))")
-                    PHPhotoLibrary.shared().performChanges({
-                        PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: self.outputURL!)
-                    }) { (success, error) in
-                        if success {
-                            print("Successfully saved.")
-                        } else {
-                            print(error?.localizedDescription as Any)
-                        }
+            if exporter?.status == .failed {
+                print(exporter?.description as Any)
+                print(exporter.debugDescription)
+            } else {
+                print("Done! URL=\(String(describing: exporter?.outputURL))")
+                PHPhotoLibrary.shared().performChanges({
+                    PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: self.outputURL!)
+                }) { (success, error) in
+                    if success {
+                        print("Successfully saved.")
+                    } else {
+                        print(error?.localizedDescription as Any)
                     }
-                    completionHandler()
                 }
+                completionHandler()
             }
         }
     }

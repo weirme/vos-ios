@@ -35,3 +35,6 @@ let scrollViewContentWidth: CGFloat = scrollViewWidth * 1.0
 let scrollViewStandardOffset: CGFloat = -screenWidth * K_scrollViewOffset
 
 let timeTolerance: CMTime = CMTime.zero
+
+let downloadSemaphore = DispatchSemaphore(value: 0)
+let convertSemaphore = DispatchSemaphore(value: 0)

@@ -26,10 +26,18 @@ class VideoControllView: UIView, UIScrollViewDelegate, SlideViewProtocol {
         return self.timeIndicatorView.frame.midX
     }
     
-    private var foreIndicatorPosState: ScrollIndicatorPosState = .out {
+    private var foreIndicatorPosState: ScrollIndicatorPosState? = nil {
         willSet {
             let state: Bool = (newValue == .out)
             let name = Notification.Name("ForeIndicatorAlignedNotification")
+            NotificationCenter.default.post(name: name, object: nil, userInfo: ["state": state])
+        }
+    }
+    
+    private var backIndicatorPosState: ScrollIndicatorPosState? = nil {
+        willSet {
+            let state: Bool = (newValue == .out)
+            let name = Notification.Name("BackIndicatorAlignedNotification")
             NotificationCenter.default.post(name: name, object: nil, userInfo: ["state": state])
         }
     }
@@ -72,22 +80,11 @@ class VideoControllView: UIView, UIScrollViewDelegate, SlideViewProtocol {
         commonInit()
     }
     
-    convenience init(frame: CGRect, foreVideo: AVAsset, backVideo: AVAsset) {
-        self.init(frame: frame)
-        self.setupVideo(foreVideo: foreVideo, backVideo: backVideo)
-    }
-    
     private func commonInit() {
         self.foreScrollView = VideoScrollView(frame: CGRect(x: 0, y: self.bounds.height * K_videoScrollViewY, width: self.bounds.width, height: self.bounds.height * K_videoScrollViewHeight))
-        self.foreScrollView.scrollView.delegate = self
-        let foreTapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapAction(tap:)))
-        self.foreScrollView.addGestureRecognizer(foreTapGesture)
         self.addSubview(self.foreScrollView)
 
         self.backScrollView = VideoScrollView(frame: CGRect(x: 0, y: self.bounds.height * (1 - K_videoScrollViewY - K_videoScrollViewHeight), width: self.bounds.width, height: self.bounds.height * K_videoScrollViewHeight))
-        self.backScrollView.scrollView.delegate = self
-        let backTapGesture =  UITapGestureRecognizer(target: self, action: #selector(self.tapAction(tap:)))
-        self.backScrollView.addGestureRecognizer(backTapGesture)
         self.addSubview(self.backScrollView)
 
         self.timeIndicatorView = IndicatorLineView(frame: CGRect(x: self.bounds.width * K_indicatorViewMidX - indicatorRadius, y: self.bounds.height * K_indicatorViewY, width: 2 * indicatorRadius, height: self.bounds.height * K_indicatorViewHeight))
@@ -98,16 +95,26 @@ class VideoControllView: UIView, UIScrollViewDelegate, SlideViewProtocol {
         
     }
     
-    func setupVideo(foreVideo: AVAsset, backVideo: AVAsset) {
-        let ratio: CGFloat = CGFloat(foreVideo.duration.seconds / backVideo.duration.seconds)
+    func setupForeVideo(foreVideo: AVAsset) {
+        let ratio: CGFloat = 0.5
         self.foreScrollView.displayVideo(video: foreVideo, durationRatio: ratio)
-        self.backScrollView.displayVideo(video: backVideo, durationRatio: 1 / ratio)
-        
         self.foreScrollView.slideView.delegate = self
-        self.backScrollView.slideView.delegate = self
-        
+        self.foreScrollView.scrollView.delegate = self
         self.foreScrollView.edgeInsets = UIEdgeInsets(top: 0, left: self.backScrollView.contentSize.width / 2, bottom: 0, right: self.backScrollView.contentSize.width / 2)
+        let foreTapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapAction(tap:)))
+        self.foreScrollView.addGestureRecognizer(foreTapGesture)
+        self.foreIndicatorPosState = .out
+    }
+    
+    func setupBackVideo(backVideo: AVAsset) {
+        let ratio: CGFloat = 2
+        self.backScrollView.displayVideo(video: backVideo, durationRatio: ratio)
+        self.backScrollView.slideView.delegate = self
+        self.backScrollView.scrollView.delegate = self
         self.backScrollView.edgeInsets = UIEdgeInsets(top: 0, left: self.foreScrollView.contentSize.width, bottom: 0, right: self.foreScrollView.contentSize.width)
+        let backTapGesture =  UITapGestureRecognizer(target: self, action: #selector(self.tapAction(tap:)))
+        self.backScrollView.addGestureRecognizer(backTapGesture)
+        self.backIndicatorPosState = .out
     }
     
     @objc func tapAction(tap: UITapGestureRecognizer) {
@@ -137,11 +144,25 @@ class VideoControllView: UIView, UIScrollViewDelegate, SlideViewProtocol {
         self.backScrollView.offset = CGPoint(x: backOffset.x + deltaOffsetX, y: backOffset.y)
     }
     
-    private func updateForeIndicatorPosState() {
-        if self.foreIndicatorPosState == .out && self.foreScrollView.clipStart < self.indicatorMidX && self.indicatorMidX < self.foreScrollView.clipEnd {
-            self.foreIndicatorPosState = .in
-        } else if self.foreIndicatorPosState == .in && (self.foreScrollView.clipStart > self.indicatorMidX || self.indicatorMidX > self.foreScrollView.clipEnd) {
-            self.foreIndicatorPosState = .out
+    private func updateIndicatorPosState(forVideo: WhichVideo) {
+        if forVideo == .fore {
+            if self.foreIndicatorPosState == nil {
+                return
+            }
+            if self.foreIndicatorPosState == .out && self.foreScrollView.clipStart < self.indicatorMidX && self.indicatorMidX < self.foreScrollView.clipEnd {
+                self.foreIndicatorPosState = .in
+            } else if self.foreIndicatorPosState == .in && (self.foreScrollView.clipStart > self.indicatorMidX || self.indicatorMidX > self.foreScrollView.clipEnd) {
+                self.foreIndicatorPosState = .out
+            }
+        } else {
+            if self.backIndicatorPosState == nil {
+                return
+            }
+            if self.backIndicatorPosState == .out && self.backScrollView.clipStart < self.indicatorMidX && self.indicatorMidX < self.backScrollView.clipEnd {
+                self.backIndicatorPosState = .in
+            } else if self.backIndicatorPosState == .in && (self.backScrollView.clipStart > self.indicatorMidX || self.indicatorMidX > self.backScrollView.clipEnd) {
+                self.backIndicatorPosState = .out
+            }
         }
     }
     
@@ -151,13 +172,12 @@ class VideoControllView: UIView, UIScrollViewDelegate, SlideViewProtocol {
         let view = scrollView.superview as! VideoScrollView
         let forVideo: WhichVideo = view == self.foreScrollView ? .fore : .back
         self.delegate?.videoScrollToTime(pos: Float(pos), forVideo: forVideo)
-        if forVideo == .fore {
-            self.updateForeIndicatorPosState()
-        }
+        self.updateIndicatorPosState(forVideo: forVideo)
     }
     
     func didSlide() {
-        self.updateForeIndicatorPosState()
+        self.updateIndicatorPosState(forVideo: .fore)
+        self.updateIndicatorPosState(forVideo: .back)
     }
     
     func scrollToPos(pos: Float, forVideo: WhichVideo) {

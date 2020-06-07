@@ -98,7 +98,7 @@ static cv::Mat crop2FullMask(cv::Mat& cropMask, std::vector<int>& bbox, int widt
 }
 
 
-static void getOverlay(cv::Mat& imgMat, cv::Mat& mask) {
+static void getOverlay(cv::Mat& overlay, cv::Mat& imgMat, cv::Mat& mask) {
     int imgHeight = imgMat.rows;
     int imgWidth = imgMat.cols;
     cv::Mat rgbMask = cv::Mat(imgHeight, imgWidth, CV_8UC3);
@@ -108,7 +108,6 @@ static void getOverlay(cv::Mat& imgMat, cv::Mat& mask) {
     rgbChannels.push_back(mask);
     cv::merge(rgbChannels, rgbMask);
     
-    cv::Mat overlay = cv::Mat::zeros(imgHeight, imgWidth, CV_8UC3);
     cv::cvtColor(imgMat, imgMat, cv::COLOR_RGBA2RGB);
     cv::addWeighted(rgbMask, ALPHA, imgMat, ALPHA, 1 - ALPHA, overlay);
     
@@ -121,13 +120,15 @@ static void getOverlay(cv::Mat& imgMat, cv::Mat& mask) {
 
 @implementation CVHelper
 
-+ (UIImage*) makeOverlayMaskOfImage: (UIImage*) image withExtremePoints: (NSArray<NSArray*>*) coords {
++ (NSArray<UIImage*>*) makeOverlayMaskOfImage: (UIImage*) image withExtremePoints: (NSArray<NSArray*>*) coords {
     std::vector<int> xcoords;
     std::vector<int> ycoords;
     splitCoords2CVec(coords, xcoords, ycoords);
     
     cv::Mat imgMat;
     UIImageToMat(image, imgMat);
+    int imgHeight = imgMat.rows;
+    int imgWidth = imgMat.cols;
     
     std::vector<int> bbox = getBbox(image, xcoords, ycoords, PAD);
     cv::Mat cropMat = cropFromBbox(imgMat, bbox);
@@ -166,12 +167,16 @@ static void getOverlay(cv::Mat& imgMat, cv::Mat& mask) {
     cv::exp(outputs, outputs);
     cv::Mat pred = 1 / (1 + outputs);
     
-    cv::Mat mask = crop2FullMask(pred, bbox, image.size.width, image.size.height, PAD);
-    getOverlay(imgMat, mask);
+    cv::Mat mask = crop2FullMask(pred, bbox, imgWidth, imgHeight, PAD);
+    cv::Mat overlay = cv::Mat(imgHeight, imgWidth, CV_8UC3);
+    getOverlay(overlay, imgMat, mask);
     
-    UIImage* img = MatToUIImage(imgMat);
+    UIImage* maskImg = MatToUIImage(mask);
+    UIImage* overlayImg = MatToUIImage(overlay);
     
-    return img;
+    NSArray* res = @[maskImg, overlayImg];
+    
+    return res;
 }
 
 @end

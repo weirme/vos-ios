@@ -1,6 +1,7 @@
 import UIKit
 import AVKit
 import AVFoundation
+import Photos
 
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -17,18 +18,18 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         imagePicker.modalPresentationStyle = .overFullScreen
         imagePicker.delegate = self
         imagePicker.allowsEditing = false
-        imagePicker.sourceType = UIImagePickerController.SourceType.photoLibrary
+        imagePicker.sourceType = .photoLibrary
         imagePicker.mediaTypes = ["public.movie"]
         imagePicker.videoExportPreset = AVAssetExportPresetPassthrough
         self.present(imagePicker, animated: true, completion: nil)
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        let videoURL = info[.mediaURL] as! URL
-        let image : UIImage = previewImageFromVideo(url: videoURL)!
-
+        let videoURL: URL? = info[.mediaURL] as? URL
+        let image : UIImage = self.previewImageFromVideo(url: videoURL!)!
         picker.dismiss(animated: true, completion: {
             let drawPointView = DrawPointViewController()
+            drawPointView.videoURL = videoURL
             drawPointView.image = image
             self.present(drawPointView, animated: true, completion: nil)
         })
@@ -49,5 +50,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             return nil
         }
     }
+    
 
 }

@@ -28,6 +28,8 @@
 		36C3A027241CEC010046F344 /* VideoScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E785082415E13300D2C745 /* VideoScrollView.swift */; };
 		36E785072415DBD200D2C745 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E785062415DBD200D2C745 /* EditViewController.swift */; };
 		36E7850E2416724900D2C745 /* SlideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7850D2416724800D2C745 /* SlideView.swift */; };
+		36FB3A70248BA19300C5BFE4 /* foreVideo.mov in Resources */ = {isa = PBXBuildFile; fileRef = 36FB3A6F248BA19200C5BFE4 /* foreVideo.mov */; };
+		36FB3A72248BD10600C5BFE4 /* VOSSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FB3A71248BD10600C5BFE4 /* VOSSession.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,6 +59,8 @@
 		36E785082415E13300D2C745 /* VideoScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoScrollView.swift; sourceTree = "<group>"; wrapsLines = 1; };
 		36E7850A2415F5FF00D2C745 /* backVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = backVideo.mp4; sourceTree = "<group>"; };
 		36E7850D2416724800D2C745 /* SlideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideView.swift; sourceTree = "<group>"; };
+		36FB3A6F248BA19200C5BFE4 /* foreVideo.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = foreVideo.mov; sourceTree = "<group>"; };
+		36FB3A71248BD10600C5BFE4 /* VOSSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VOSSession.swift; sourceTree = "<group>"; };
 		85BB72DA8BDD1E5B6060864B /* Pods-vos_ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vos_ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-vos_ios/Pods-vos_ios.debug.xcconfig"; sourceTree = "<group>"; };
 		C9979904DB85D131CFFF4CA2 /* Pods-vos_ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vos_ios.release.xcconfig"; path = "Pods/Target Support Files/Pods-vos_ios/Pods-vos_ios.release.xcconfig"; sourceTree = "<group>"; };
 		EB27019FB13F5D80AFD24517 /* libPods-vos_ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-vos_ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -108,6 +112,7 @@
 				363DEE2923FA36370053E756 /* LaunchScreen.storyboard */,
 				363DEE2C23FA36370053E756 /* Info.plist */,
 				36565EE7247ACE260036FB67 /* swan.mp4 */,
+				36FB3A6F248BA19200C5BFE4 /* foreVideo.mov */,
 				36E7850A2415F5FF00D2C745 /* backVideo.mp4 */,
 			);
 			path = vos_ios;
@@ -118,6 +123,7 @@
 			children = (
 				3607E8952482991900239F93 /* VideoCompositor.swift */,
 				365E202D2471846800FFFC7D /* HEVCAlpha.swift */,
+				36FB3A71248BD10600C5BFE4 /* VOSSession.swift */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -241,6 +247,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				36FB3A70248BA19300C5BFE4 /* foreVideo.mov in Resources */,
 				363DEE2B23FA36370053E756 /* LaunchScreen.storyboard in Resources */,
 				361342F623FD1F6800418F38 /* dextr.pt in Resources */,
 				363DEE2823FA36370053E756 /* Assets.xcassets in Resources */,
@@ -284,6 +291,7 @@
 				363DEE1F23FA36300053E756 /* AppDelegate.swift in Sources */,
 				363DEE2123FA36300053E756 /* SceneDelegate.swift in Sources */,
 				365E202E2471846800FFFC7D /* HEVCAlpha.swift in Sources */,
+				36FB3A72248BD10600C5BFE4 /* VOSSession.swift in Sources */,
 				3669BD7A24837D210092F111 /* ViewController.swift in Sources */,
 				3669BD7D24837F090092F111 /* DEXTR.mm in Sources */,
 				36E785072415DBD200D2C745 /* EditViewController.swift in Sources */,

@@ -102,6 +102,7 @@ func convertToHEVCAlpha(sourceURL: URL, destinationURL: URL) {
     removeGreenChroma(sourceURL: sourceURL, destinationURL: destinationURL) { status in
         if status == .completed {
             print("Exported successfully")
+            convertSemaphore.signal()
         } else {
             print("Export failed with status: \(status)")
         }

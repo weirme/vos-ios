@@ -8,9 +8,12 @@ class DrawPointViewController: UIViewController, NVActivityIndicatorViewable {
     var undoButton: UIButton!
     var okButton: UIButton!
     var scrollView: ImageScrollView!
-    var image: UIImage!
     var tapGesture: UITapGestureRecognizer!
+    var image: UIImage!
 
+    var videoURL: URL!
+    var maskURL: URL? = nil
+        
     var coords: [[Int]] = []
     var xmarks: [UIImageView] = []
     var isOverlay = false
@@ -105,7 +108,12 @@ class DrawPointViewController: UIViewController, NVActivityIndicatorViewable {
             startAnimating(CGSize(width: 80, height: 80), message: "Processing...", type: NVActivityIndicatorType.pacman, color: #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1), backgroundColor: UIColor(displayP3Red: 128, green: 128, blue: 128, alpha: 0.3), textColor: #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1))
             
             DispatchQueue.global().async {
-                let overlayImg: UIImage! = CVHelper.makeOverlayMask(image: self.image, coords: self.coords)
+                let resImgs: [UIImage] = CVHelper.makeOverlayMask(image: self.image, coords: self.coords)
+                let maskImg: UIImage = resImgs[0]
+                let overlayImg: UIImage = resImgs[1]
+                
+                self.saveImageToDocumentDirectory(image: maskImg)
+                
                 DispatchQueue.main.async {
                     self.stopAnimating()
                     self.okButton.isHidden = true
@@ -122,12 +130,52 @@ class DrawPointViewController: UIViewController, NVActivityIndicatorViewable {
             }
         }
         else {
-            self.dismiss(animated: true) {
-                let stroyboard = UIStoryboard(name: "Main", bundle: nil)
-                guard let next = stroyboard.instantiateViewController(identifier: "editViewController") as? EditViewController else { return }
-                let topController = UIApplication.shared.windows[0].rootViewController as? UINavigationController
-                topController?.pushViewController(next, animated: true)
+            startAnimating(CGSize(width: 80, height: 80), message: "VOS Processing...", type: NVActivityIndicatorType.pacman, color: #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1), backgroundColor: UIColor(displayP3Red: 128, green: 128, blue: 128, alpha: 0.3), textColor: #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1))
+            
+            let vosSession = VOSSession()
+            var segURL: URL? = nil
+            var foreVideoURL: URL? = nil
+            do {
+                segURL = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+                segURL = segURL?.appendingPathComponent("foreVideoNoAlpha.mp4")
+                foreVideoURL = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+                foreVideoURL = foreVideoURL?.appendingPathComponent("foreVideoWithAlpha.mov")
+            } catch {
+                print(error)
+                return
             }
+            
+            DispatchQueue.global().async {
+                vosSession.run(videoURL: self.videoURL, maskURL: self.maskURL!, saveURL: segURL!)
+                
+                downloadSemaphore.wait()
+                convertToHEVCAlpha(sourceURL: segURL!, destinationURL: foreVideoURL!)
+                
+                convertSemaphore.wait()
+                DispatchQueue.main.async {
+                    self.stopAnimating()
+                    self.dismiss(animated: true) {
+                        let stroyboard = UIStoryboard(name: "Main", bundle: nil)
+                        guard let next = stroyboard.instantiateViewController(identifier: "editViewController") as? EditViewController else { return }
+                        next.foreVideoURL = foreVideoURL
+                        let topController = UIApplication.shared.windows[0].rootViewController as? UINavigationController
+                        topController?.pushViewController(next, animated: true)
+                    }
+                }
+            }
+        }
+    }
+    
+    func saveImageToDocumentDirectory(image: UIImage) {
+        do {
+            self.maskURL = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            self.maskURL = self.maskURL?.appendingPathComponent("mask.png")
+            try? FileManager.default.removeItem(at: self.maskURL!)
+            let pngData = image.pngData()
+            try pngData?.write(to: self.maskURL!)
+            print(self.maskURL as Any)
+        } catch {
+            print(error)
         }
     }
     
