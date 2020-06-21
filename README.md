@@ -4,7 +4,7 @@ IOS demo using object and video segmentation network.
 
 ## Demo GIF
 
-- **Segment the foreground object** in the first frame with 4 extreme points.
+- **Segment foreground object** in the first frame with 4 extreme points.
 
 <img src="./gif/dextr.gif" alt="dextr" width="30%" />
 
